@@ -1,5 +1,7 @@
 from transliterate import translit, detect_language
 
+from . import decorators
+
 
 def make_slug(title):
     language = detect_language(title)
@@ -11,6 +13,7 @@ def make_slug(title):
     return '-'.join(slug.lower().replace('\'', '').replace('\"', '').split())
 
 
+@decorators.except_value_error
 def get_dict_characteristics(other_characteristics):
     result = dict()
     for line in other_characteristics.split('\n'):

@@ -2,15 +2,17 @@
 
   <div class="Tabs-block" id="description">
     <h2>Megano Store Hystory</h2>
-    <p>Lorem ipsum dolor sit amet, consectetuer&#32;
+    <p>
       {{product.description}}
     </p>
     <img class="pict pict_right" src="{% static 'assets/img/content/home/bigGoods.png' %}" alt="bigGoods.png">
+    
     <ul>
       {% for characteristic in characteristics %}
       <li>{{characteristic}}</li>
       {% endfor %}
     </ul>
+    
     <div class="clearfix"></div>
     <div class="table">
       <table>
