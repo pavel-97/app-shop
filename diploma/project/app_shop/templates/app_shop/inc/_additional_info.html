@@ -1,0 +1,13 @@
+  <div class="Tabs-block" id="sellers">
+    <div class="Categories Categories_product"></div>
+  </div>
+
+  <div class="Tabs-block" id="addit">
+    <div class="Product-props">
+      {% for key, value in additional_info.items %}
+      <div class="Product-prop">
+        <strong>{{key}}</strong><span> {{value}}</span>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
