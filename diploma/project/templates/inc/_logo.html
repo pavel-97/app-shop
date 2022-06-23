@@ -1,0 +1,5 @@
+{% load static %}
+
+<a class="logo {{html_class_logo}}" href="{% url 'index' %}">
+	<img class="logo-image" src="{% get_static_prefix %}assets/img/{{img_name}}.png" alt="logo.png"/>
+</a>

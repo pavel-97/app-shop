@@ -44,16 +44,24 @@
             | браузера здесь&nbsp;
         | для правильного отображения сайта.
     -->
-    {% block 'header' %}
-      {% include 'inc/_header.html' %}
-    {% endblock  %}
+    {% block header %}
+
+      {% with html_class_socials='ControlPanel-menu' %}
+        {% include 'inc/_header.html' %}
+      {% endwith %}
+    
+      {% endblock  %}
 
     {% block 'main' %}
       MAIN
     {% endblock  %}
 
-    {% block 'footer' %}
-      {% include 'inc/_footer.html' %}
+    {% block footer %}
+
+      {% with html_class_socials='Footer-menuSoc' %}
+        {% include 'inc/_footer.html' %}
+      {% endwith %}
+
     {% endblock  %}
     <!--+Middle-->
     <!--    +div.-top-->

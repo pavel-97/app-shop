@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from django.utils import timezone
 from django.urls import reverse_lazy
 
 from . import utility
@@ -22,6 +23,8 @@ class Product(utility.StrMixin, models.Model):
     characteristic = models.TextField(blank=True ,verbose_name=_('characteristic'))
     other_characteristic = models.TextField(blank=True ,verbose_name=_('other characteristic'))
     additional_info = models.TextField(blank=True, verbose_name=_('additional info'))
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('created at'))
+    updated_at = models.DateTimeField(auto_now=True, verbose_name=_('updated at'))
 
     def save(self, *args, **kwargs):
         self.slug = tools.make_slug(self.title)

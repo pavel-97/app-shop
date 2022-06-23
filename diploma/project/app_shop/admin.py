@@ -12,7 +12,7 @@ class CategoryAdmin(admin.ModelAdmin):
 
 @admin.register(models.Product)
 class ProductAdmin(admin.ModelAdmin):
-    pass
+    list_display = ['title', 'updated_at', 'price']
 
 
 @admin.register(models.Tag)

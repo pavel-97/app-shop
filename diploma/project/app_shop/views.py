@@ -1,22 +1,38 @@
+from dataclasses import field
 from django.shortcuts import render
-from django.views.generic import View, DetailView
+from django.views.generic import View, DetailView, ListView
 from django.db.models import Min
 
 from . import tools
 from . import models
+from . import utility
 
 # Create your views here.
 
 
-def index(request):
-    return render(request, 'app_shop/index.html', {})
+class HomeView(ListView):
+    template_name = 'app_shop/index.html'
+    queryset = models.Product.objects.all().select_related('category').prefetch_related('tag')
+    context_object_name = 'products'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['categories'] = models.Category.objects.all().annotate(Min('product__price'))[:3]
+        return context
 
 
-class HomeView(View):
-    def get(self, request):
-        categories = models.Category.objects.all().annotate(Min('product__price'))[:3]
-        products = models.Product.objects.all().select_related('category').prefetch_related('tag')
-        return render(request, 'app_shop/index.html', {'categories': categories, 'products': products})
+class ProductListView(utility.ProductListOrderByMixin, ListView):
+    model = models.Product
+    
+    
+class ProductListOrderByDateListView(utility.ProductListOrderByMixin, ListView):
+    model = models.Product
+    field = '-updated_at'
+
+
+class ProductListOrderByPriceListView(utility.ProductListOrderByMixin, ListView):
+    model = models.Product
+    field = '-price'
 
 
 class ProductDetailView(DetailView):
@@ -29,3 +45,8 @@ class ProductDetailView(DetailView):
         context['other_characteristics'] = tools.get_dict_characteristics(context.get('product').other_characteristic)
         context['additional_info'] = tools.get_dict_characteristics(context.get('product').additional_info)
         return context
+    
+    
+class BasketView(View):
+    def get(self, request):
+        return render(request, 'app_shop/basket.html')
