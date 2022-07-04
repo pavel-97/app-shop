@@ -1,0 +1,17 @@
+{% extends 'app_profile/app_profile_base.html' %}
+
+{% block main %}
+<div class="Middle Middle_top">
+	<div class="Middle-top">
+		<div class="wrap">
+			<div class="Section-content">
+				<form class="form" method="post">
+					{% csrf_token %}
+					{{form.as_p}}
+					<button type="submit">Зарегестрироваться</button>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock  %}

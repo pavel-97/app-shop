@@ -7,7 +7,7 @@ from django.utils.translation import gettext_lazy as _
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name=_('user'))
-    balance = models.DecimalField(max_digits=6, decimal_places=2, verbose_name=_('balance'))
+    balance = models.DecimalField(max_digits=6, decimal_places=2, default=0, verbose_name=_('balance'))
     
     def __str__(self):
         return self.user.username

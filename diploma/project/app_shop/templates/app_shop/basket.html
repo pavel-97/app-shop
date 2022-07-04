@@ -2,31 +2,12 @@
 
 {% load static %}
 
-{% block 'main' %}
+{% block main %}
 <div class="Middle Middle_top">
     
-  <div class="Middle-top">
-
-    <div class="wrap">
-    
-      <div class="Middle-header">
-    
-        <h1 class="Middle-title">Корзина</h1>
-    
-        <ul class="breadcrumbs Middle-breadcrumbs">
-            <li class="breadcrumbs-item">
-              <a href="{% url 'index' %}">home</a>
-            </li>
-            <li class="breadcrumbs-item breadcrumbs-item_current">
-              <span>Корзина</span>
-            </li>
-          </ul>
-    
-        </div>
-    
-      </div>
-    
-    </div>
+    {% with title='Корзина' span='Корзина' %}
+      {% include 'inc/header/_middle.html' %}
+    {% endwith %}
     
     <div class="Section">
 

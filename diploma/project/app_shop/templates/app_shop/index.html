@@ -2,7 +2,7 @@
 
 {% load static %}
 
-{% block 'main' %}
+{% block main %}
 <div class="Middle">
 
   {% block 'favorites' %}
@@ -16,7 +16,7 @@
   <div class="Section Section_column Section_columnRight">
     <div class="wrap">
 
-      {% block 'marks' %}
+      {% block marks %}
       <div class="Section-column">
 
         <div class="Section-columnSection Section-columnSection_mark">
@@ -77,7 +77,7 @@
       </div>
       {% endblock %}
 
-      {% block 'limited_edition' %}
+      {% block limited_edition %}
         {% include 'app_shop/inc/_limited_edition.html' %}
       {% endblock %}
 

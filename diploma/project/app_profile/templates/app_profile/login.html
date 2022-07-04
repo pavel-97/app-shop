@@ -1,0 +1,39 @@
+{% extends 'app_profile/app_profile_base.html' %}
+
+{% block main %}
+<div class="Middle Middle_top">
+	<div class="wrap">
+		<form class="form" method="post">
+			{% csrf_token %}
+			
+			<div class="row">
+				<div class="row-block">
+
+					{% for field in form %}
+						<div class="form-group">
+							<label class="form-label">
+								{{field.label}}
+							</label>
+							{{field}}
+
+							{% if field.errors %}
+								{% for error in field.errors %}
+									<label class="form-label">
+										{{error}}
+									</label>
+								{% endfor %}
+							{% endif %}
+							
+						</div>
+					{% endfor %}
+
+				</div>
+			</div>
+			
+			<button class="btn btn_primary btn_lg" type="submit">Войти</button>
+			
+		</form>
+
+	</div>
+</div>
+{% endblock  %}

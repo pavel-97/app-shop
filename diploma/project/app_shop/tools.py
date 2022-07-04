@@ -33,3 +33,23 @@ def get_dict_characteristics(other_characteristics):
 
 def format_name_class(name, obj):
     return '{}_{}'.format(name, obj.__class__)
+
+
+def set_filter(instance, filter_name, init_value=None):
+    
+    if instance.request.GET:
+        filters = init_value
+
+        if not filters:
+            filters = cache.get(filter_name)
+            if filters is None: filters = init_value
+
+        else:
+            cache.set(filter_name, filters)
+        
+    else:
+        cache.delete(filter_name)
+        filters = init_value
+        
+    return filters
+        

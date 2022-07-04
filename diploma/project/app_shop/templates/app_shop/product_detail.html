@@ -2,160 +2,148 @@
 
 {% load static %}
 
-{% block 'main' %}
-  <div class="Middle Middle_top">
+{% block main %}
+<div class="Middle Middle_top">
 
-    <div class="Middle-top">
-      <div class="wrap">
-        <div class="Middle-header">
-          <h1 class="Middle-title">Megano Product</h1>
-          <ul class="breadcrumbs Middle-breadcrumbs">
-            <li class="breadcrumbs-item">
-                <a href="{% url 'index' %}">home</a>
-            </li>
-            <li class="breadcrumbs-item breadcrumbs-item_current">
-                <span>Product</span>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </div>
+  {% with title='Megano Product' span='Product' %}
+    {% include 'inc/header/_middle.html' %}
+  {% endwith %}
 
-    <div class="Section">
-      <div class="wrap">
-        <div class="Product">
-          <div class="ProductCard">
+  <div class="Section">
+    <div class="wrap">
+      <div class="Product">
+        <div class="ProductCard">
 
-            <div class="ProductCard-look">
-              <div class="ProductCard-photo">
-                <img src="{% static 'assets/img/content/home/bigGoods.png' %}" alt="bigGoods.png">
-              </div>
-              <div class="ProductCard-picts">
-                <a class="ProductCard-pict ProductCard-pict_ACTIVE" href="{% static 'assets/img/content/home/bigGoods.png' %}">
-                  <img src="{% static 'assets/img/content/home/bigGoods.png' %}" alt="bigGoods.png">
-                </a>
-                <a class="ProductCard-pict" href="{% static 'assets/img/content/home/slider.png' %}">
-                  <img src="{% static 'assets/img/content/home/slider.png' %}" alt="slider.png">
-                </a>
-                <a class="ProductCard-pict" href="{% static 'assets/img/content/home/videoca.png' %}">
-                  <img src="{% static 'assets/img/content/home/videoca.png' %}" alt="videoca.png">
-                </a>
-              </div>
+          <div class="ProductCard-look">
+            <div class="ProductCard-photo">
+              <img src="{% static 'assets/img/content/home/bigGoods.png' %}" alt="bigGoods.png">
             </div>
-
-            <div class="ProductCard-desc">
-              <div class="ProductCard-header">
-                <h2 class="ProductCard-title">{{product.title}}</h2>
-                <div class="ProductCard-info">
-                  <div class="ProductCard-cost">
-                    <div class="ProductCard-price">
-                      ${{product.price}}
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {% block 'characteristics' %}
-                {% include 'app_shop/inc/_characteristics.html' %}
-              {% endblock  %}
-
-
-              <div class="ProductCard-cart">
-                <div class="ProductCard-cartElement ProductCard-cartElement_amount">
-                  <div class="Amount Amount_product">
-                    <button class="Amount-remove" type="button"></button>
-                    <input class="Amount-input form-input" name="amount" type="text" value="1">
-                    <button class="Amount-add" type="button"></button>
-                  </div>
-                </div>
-                <div class="ProductCard-cartElement">
-                  <a class="btn btn_primary" href="#">
-                    <img class="btn-icon" src="{% static 'assets/img/icons/card/cart_white.svg' %}" alt="cart_white.svg">
-                    <span class="btn-content">Add To Cart</span>
-                  </a>
-                </div>
-              </div>
-              
-              {% block 'tags' %}
-              {% include 'app_shop/inc/_tags.html' %}
-              {% endblock  %}
-
+            <div class="ProductCard-picts">
+              <a class="ProductCard-pict ProductCard-pict_ACTIVE" href="{% static 'assets/img/content/home/bigGoods.png' %}">
+                <img src="{% static 'assets/img/content/home/bigGoods.png' %}" alt="bigGoods.png">
+              </a>
+              <a class="ProductCard-pict" href="{% static 'assets/img/content/home/slider.png' %}">
+                <img src="{% static 'assets/img/content/home/slider.png' %}" alt="slider.png">
+              </a>
+              <a class="ProductCard-pict" href="{% static 'assets/img/content/home/videoca.png' %}">
+                <img src="{% static 'assets/img/content/home/videoca.png' %}" alt="videoca.png">
+              </a>
             </div>
           </div>
 
-          <div class="Tabs Tabs_default">
-            <div class="Tabs-links">
-              <a class="Tabs-link_ACTIVE Tabs-link" href="#description">
-                <span>Description</span>
-              </a>
-              <a class="Tabs-link" href="#addit">
-                <span>AdditionaL Info</span>
-              </a>
-              <a class="Tabs-link" href="#reviews">
-                  <span>Reviews (3)</span>
-              </a>
+          <div class="ProductCard-desc">
+            <div class="ProductCard-header">
+              <h2 class="ProductCard-title">{{product.title}}</h2>
+              <div class="ProductCard-info">
+                <div class="ProductCard-cost">
+                  <div class="ProductCard-price">
+                    ${{product.price}}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {% block 'characteristics' %}
+              {% include 'app_shop/inc/_characteristics.html' %}
+            {% endblock  %}
+
+
+            <div class="ProductCard-cart">
+              <div class="ProductCard-cartElement ProductCard-cartElement_amount">
+                <div class="Amount Amount_product">
+                  <button class="Amount-remove" type="button"></button>
+                  <input class="Amount-input form-input" name="amount" type="text" value="1">
+                  <button class="Amount-add" type="button"></button>
+                </div>
+              </div>
+              <div class="ProductCard-cartElement">
+                <a class="btn btn_primary" href="#">
+                  <img class="btn-icon" src="{% static 'assets/img/icons/card/cart_white.svg' %}" alt="cart_white.svg">
+                  <span class="btn-content">Add To Cart</span>
+                </a>
+              </div>
             </div>
             
-            <div class="Tabs-wrap">
+            {% block 'tags' %}
+            {% include 'app_shop/inc/_tags.html' %}
+            {% endblock  %}
 
-              {% block 'other_characteristics' %}
-                {% include 'app_shop/inc/_other_chracteristics.html' %}
-              {% endblock %}
+          </div>
+        </div>
 
-              {% block 'additional_info' %}
-                {% include 'app_shop/inc/_additional_info.html' %}
-              {% endblock %}
+        <div class="Tabs Tabs_default">
+          <div class="Tabs-links">
+            <a class="Tabs-link_ACTIVE Tabs-link" href="#description">
+              <span>Description</span>
+            </a>
+            <a class="Tabs-link" href="#addit">
+              <span>AdditionaL Info</span>
+            </a>
+            <a class="Tabs-link" href="#reviews">
+                <span>Reviews (3)</span>
+            </a>
+          </div>
+          
+          <div class="Tabs-wrap">
 
-              <div class="Tabs-block" id="reviews">
-                <header class="Section-header">
-                  <h3 class="Section-title">2 Reviews</h3>
-                </header>
-                <div class="Comments">
-                  <div class="Comment">
-                    <div class="Comment-column Comment-column_pict">
-                      <div class="Comment-avatar"></div>
-                    </div>
-                    <div class="Comment-column">
-                      <header class="Comment-header">
-                        <div>
-                          <strong class="Comment-title">Alexandra Brownie</strong><span class="Comment-date">December 25&#32;&#32;/&#32;&#32;2017&#32;&#32;/&#32;&#32;22:50</span>
-                        </div>
-                      </header>
-                      <div class="Comment-content">
-                          Lorem ipsum dolor sit amet, consectetuer adipiscing elit doli. Aenean commodo ligula eget dolor. Aenean massa. Cumtipsu sociis natoque penatibus et magnis dis parturient montesti, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eutu, pretiumem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justotuio, rhoncus ut loret, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus element semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae.
+            {% block 'other_characteristics' %}
+              {% include 'app_shop/inc/_other_chracteristics.html' %}
+            {% endblock %}
+
+            {% block 'additional_info' %}
+              {% include 'app_shop/inc/_additional_info.html' %}
+            {% endblock %}
+
+            <div class="Tabs-block" id="reviews">
+              <header class="Section-header">
+                <h3 class="Section-title">2 Reviews</h3>
+              </header>
+              <div class="Comments">
+                <div class="Comment">
+                  <div class="Comment-column Comment-column_pict">
+                    <div class="Comment-avatar"></div>
+                  </div>
+                  <div class="Comment-column">
+                    <header class="Comment-header">
+                      <div>
+                        <strong class="Comment-title">Alexandra Brownie</strong><span class="Comment-date">December 25&#32;&#32;/&#32;&#32;2017&#32;&#32;/&#32;&#32;22:50</span>
                       </div>
+                    </header>
+                    <div class="Comment-content">
+                        Lorem ipsum dolor sit amet, consectetuer adipiscing elit doli. Aenean commodo ligula eget dolor. Aenean massa. Cumtipsu sociis natoque penatibus et magnis dis parturient montesti, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eutu, pretiumem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justotuio, rhoncus ut loret, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus element semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae.
                     </div>
                   </div>
                 </div>
-                <header class="Section-header Section-header_product">
-                  <h3 class="Section-title">Add Review</h3>
-                </header>
-                <div class="Tabs-addComment">
-                  <form class="form" action="#" method="post">
-                    <div class="form-group">
-                      <textarea class="form-textarea" id="review" name="review" placeholder="Review"></textarea>
-                    </div>
-                    <div class="form-group">
-                      <div class="row">
-                        <div class="row-block">
-                          <input class="form-input" id="name" name="name" type="text" placeholder="Name">
-                        </div>
-                        <div class="row-block">
-                          <input class="form-input" id="email" name="email" type="text" placeholder="Email">
-                        </div>
+              </div>
+              <header class="Section-header Section-header_product">
+                <h3 class="Section-title">Add Review</h3>
+              </header>
+              <div class="Tabs-addComment">
+                <form class="form" action="#" method="post">
+                  <div class="form-group">
+                    <textarea class="form-textarea" id="review" name="review" placeholder="Review"></textarea>
+                  </div>
+                  <div class="form-group">
+                    <div class="row">
+                      <div class="row-block">
+                        <input class="form-input" id="name" name="name" type="text" placeholder="Name">
+                      </div>
+                      <div class="row-block">
+                        <input class="form-input" id="email" name="email" type="text" placeholder="Email">
                       </div>
                     </div>
-                    <div class="form-group">
-                      <button class="btn btn_muted" type="submit">Submit Review</button>
-                    </div>
-                  </form>
-                </div>
+                  </div>
+                  <div class="form-group">
+                    <button class="btn btn_muted" type="submit">Submit Review</button>
+                  </div>
+                </form>
               </div>
-              
             </div>
+            
           </div>
         </div>
       </div>
     </div>
   </div>
+</div>
 {% endblock  %}

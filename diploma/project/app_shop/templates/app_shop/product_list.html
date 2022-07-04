@@ -2,126 +2,74 @@
 
 {% load static %}
 
-{% block 'main' %}
+{% block main %}
 <div class="Middle Middle_top">
 
-    <div class="Middle-top">
-      <div class="wrap">
-        <div class="Middle-header">
-          <h1 class="Middle-title">Catalog Megano</h1>
-          <ul class="breadcrumbs Middle-breadcrumbs">
-            <li class="breadcrumbs-item">
-              <a href="index.html">home</a>
-            </li>
-            <li class="breadcrumbs-item breadcrumbs-item_current">
-              <span>Catalog</span>
-            </li>
-          </ul>
+  {% with title='Catalog Megano' span='Catalog' %}
+    {% include 'inc/header/_middle.html' %}
+  {% endwith %}
+
+  <div class="Section Section_column Section_columnLeft">
+    <div class="wrap">
+      <div class="Section-column">
+        <div class="Section-columnSection">
+
+          <header class="Section-header">
+            <strong class="Section-title">Filter</strong>
+          </header>
+
+          {% block form_filter %}
+            {% include 'app_shop/inc/_form_filter.html' %}
+          {% endblock %}
+        
+        </div>
+
+        <div class="Section-columnSection">
+          
+          <header class="Section-header">
+            <strong class="Section-title">Popular tags</strong>
+          </header>
+
+          <div class="Section-columnContent">
+            <div class="buttons">
+              <a class="btn btn_default btn_sm" href="#">Video</a>
+              <a class="btn btn_default btn_sm" href="#">Development</a>
+              <a class="btn btn_default btn_sm" href="#">Gaming</a>
+              <a class="btn btn_default btn_sm" href="#">Asus</a>
+              <a class="btn btn_default btn_sm" href="#">Development</a>
+              <a class="btn btn_default btn_sm" href="#">Video</a>
+            </div>
+          </div>
+          
         </div>
       </div>
-    </div>
 
-    <div class="Section Section_column Section_columnLeft">
-      <div class="wrap">
-        <div class="Section-column">
-          <div class="Section-columnSection">
-
-            <header class="Section-header">
-              <strong class="Section-title">Filter</strong>
-            </header>
-
-            <div class="Section-columnContent">
-              <form class="form" action="#" method="post">
-                
-                <div class="form-group">
-                  <div class="range Section-columnRange">
-                    <input class="range-line" id="price" name="price" type="text" data-type="double" data-min="7" data-max="50" data-from="7" data-to="27"/>
-                    <div class="range-price">Price:&#32;
-                      <div class="rangePrice"></div>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="form-group">
-                  <input class="form-input form-input_full" id="title" name="title" type="text" placeholder="Название"/>
-                </div>
-                
-                <div class="form-group">
-                  <!-- - var options = setOptions(items, ['value', 'selected', 'disabled']);-->
-                </div>
-                
-                <div class="form-group">
-                  <label class="toggle">
-                    <input type="checkbox"/>
-                    <span class="toggle-box"></span>
-                    <span class="toggle-text">Только товары в наличии</span>
-                  </label>
-                </div>
-                
-                <div class="form-group">
-                  <label class="toggle">
-                    <input type="checkbox"/>
-                    <span class="toggle-box"></span>
-                    <span class="toggle-text">С бесплатной доставкой</span>
-                  </label>
-                </div>
-                
-                <div class="form-group">
-                  <div class="buttons">
-                    <a class="btn btn_square btn_dark btn_narrow" href="#">Filter</a>
-                  </div>
-                </div>
-              </form>
-            </div>
-          
+      <div class="Section-content">
+        
+        <div class="Sort">
+          <div class="Sort-title">
+            Сортировать по:
           </div>
 
-          <div class="Section-columnSection">
-            
-            <header class="Section-header">
-              <strong class="Section-title">Popular tags</strong>
-            </header>
-
-            <div class="Section-columnContent">
-              <div class="buttons">
-                <a class="btn btn_default btn_sm" href="#">Video</a>
-                <a class="btn btn_default btn_sm" href="#">Development</a>
-                <a class="btn btn_default btn_sm" href="#">Gaming</a>
-                <a class="btn btn_default btn_sm" href="#">Asus</a>
-                <a class="btn btn_default btn_sm" href="#">Development</a>
-                <a class="btn btn_default btn_sm" href="#">Video</a>
-              </div>
-            </div>
-            
+          <div class="Sort-variants">
+            <a class="Sort-sortBy Sort-sortBy_dec" href="#">Популярности</a>
+            <a class="Sort-sortBy" href="{% url 'products_order_by_price' %}">Цене</a>
+            <a class="Sort-sortBy" href="#">Отзывам</a>
+            <a class="Sort-sortBy Sort-sortBy_inc" href="{% url 'products_order_by_date' %}">Новизне</a>
           </div>
+
         </div>
 
-        <div class="Section-content">
-          
-          <div class="Sort">
-            <div class="Sort-title">
-              Сортировать по:
-            </div>
+        {% block 'cards' %}
+          {% include 'app_shop/inc/_cards.html' %}
+        {% endblock%}
 
-            <div class="Sort-variants">
-              <a class="Sort-sortBy Sort-sortBy_dec" href="#">Популярности</a>
-              <a class="Sort-sortBy" href="{% url 'products_order_by_price' %}">Цене</a>
-              <a class="Sort-sortBy" href="#">Отзывам</a>
-              <a class="Sort-sortBy Sort-sortBy_inc" href="{% url 'products_order_by_date' %}">Новизне</a>
-            </div>
+        {% block 'paginator' %}
+          {% include 'app_shop/inc/_paginator.html' %}
+        {% endblock %}
 
-          </div>
-
-          {% block 'cards' %}
-            {% include 'app_shop/inc/_cards.html' %}
-          {% endblock%}
-
-          {% block 'paginator' %}
-            {% include 'app_shop/inc/_paginator.html' %}
-          {% endblock %}
-
-        </div>
       </div>
     </div>
   </div>
+</div>
 {% endblock  %}

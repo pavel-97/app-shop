@@ -1,4 +1,3 @@
-from dataclasses import field
 from django.shortcuts import render
 from django.views.generic import View, DetailView, ListView
 from django.db.models import Min
@@ -19,18 +18,22 @@ class HomeView(ListView):
         context = super().get_context_data(**kwargs)
         context['categories'] = models.Category.objects.all().annotate(Min('product__price'))[:3]
         return context
+    
+    def get_queryset(self):
+        queryset = super().get_queryset().filter(title__icontains=self.request.GET.get('query', ''))
+        return queryset
 
 
-class ProductListView(utility.ProductListOrderByMixin, ListView):
+class ProductListView(utility.ProductQuerysetFilterMixin, utility.ProductListOrderByMixin, utility.SearchMixin, ListView):
     model = models.Product
     
     
-class ProductListOrderByDateListView(utility.ProductListOrderByMixin, ListView):
+class ProductListOrderByDateListView(utility.ProductQuerysetFilterMixin, utility.ProductListOrderByMixin, utility.SearchMixin, ListView):
     model = models.Product
     field = '-updated_at'
 
 
-class ProductListOrderByPriceListView(utility.ProductListOrderByMixin, ListView):
+class ProductListOrderByPriceListView(utility.ProductQuerysetFilterMixin, utility.ProductListOrderByMixin, utility.SearchMixin, ListView):
     model = models.Product
     field = '-price'
 
