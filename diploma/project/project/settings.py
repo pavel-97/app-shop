@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'debug_toolbar',
+    'mptt',
     'app_shop.apps.AppShopConfig',
     'app_profile.apps.AppProfileConfig',
 ]
@@ -137,13 +138,14 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
-
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'project/static'),
 ]
 
-LOGIN_REDIRECT_URL = reverse_lazy('account')
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
+LOGIN_REDIRECT_URL = reverse_lazy('account')
+LOGOUT_REDIRECT_URL = reverse_lazy('index')
 LOGIN_URL = reverse_lazy('login')

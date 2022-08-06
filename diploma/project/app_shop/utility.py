@@ -1,7 +1,11 @@
 from django.core.cache import cache
+from django.views.generic import View
+from django.shortcuts import render
+from django.db.models import Min, Max
 
 from . import tools
 from . import decorators
+from . import models
 
 
 class StrMixin:
@@ -29,13 +33,13 @@ class ProductListOrderByMixin:
             )
     
     def get_queryset(self):
-        queryset = super().get_queryset().prefetch_related('tag')
+        queryset = super().get_queryset().prefetch_related('tag').prefetch_related('images')
         field = cache.get_or_set(tools.format_name_class('field', self), self.field)
         field_reverse = cache.get_or_set(tools.format_name_class('field_reverse', self), self.field_reverse)
         
         if field:
             queryset = queryset.order_by(field if all(
-                self.request.GET.get(_) is None for _ in ('page', 'price', 'title', 'query') 
+                self.request.GET.get(_) is None for _ in ('page', 'price', 'title', 'query')
                 ) else field_reverse)
             self.switch_field() if all(
                 self.request.GET.get(_) is None for _ in ('page', 'price', 'title', 'query')
@@ -43,7 +47,7 @@ class ProductListOrderByMixin:
 
         return queryset
     
-    
+
 class ProductQuerysetFilterMixin:
     
     @decorators.except_attr_error_with_arg(return_object=dict())
@@ -76,3 +80,27 @@ class SearchMixin:
             )
 
         return super().get_queryset().filter(title__contains=query)
+    
+    
+class BasketContextMixin:
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context['basket'] = cache.get('basket', dict())
+        return context
+    
+
+class CategoryContextMixin:
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context['categories'] = models.CategoryMPTT.objects.annotate(Min('product__price')).annotate(Max('product__views'))
+        return context
+    
+    
+class View(View):
+    template_name = None
+    
+    def get_context_data(self, *args, **kwargs):
+        return dict()
+    
+    def get(self, request, *args, **kwargs):
+        return render(request, self.template_name, self.get_context_data(**kwargs))

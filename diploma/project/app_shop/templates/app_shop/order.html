@@ -1,0 +1,45 @@
+{% extends 'app_shop/app_shop_base.html' %}
+
+{% block main %}
+<div class="Middle Middle_top">
+	
+	{% with  title='Оформление заказа' span='Оформление заказа' %}
+		{% include 'inc/header/_middle.html' %}
+	{% endwith %}
+
+	<div class="Section Section_column Section_columnRight Section_columnWide Order">
+		<div class="wrap">
+			
+			{% block order_menu %}
+				{% include 'app_shop/inc/_order_menu.html' %}
+			{% endblock  %}
+
+			<div class="Section-content">
+
+				<form class="form" method="post">
+					{% csrf_token %}
+					{{form.errors}}
+					
+					{% block order_menu_step_1 %}
+						{% include 'app_shop/inc/order_menu_steps/_order_menu_step_1.html' %}
+					{% endblock  %}
+
+					{% block order_menu_step_2 %}
+						{% include 'app_shop/inc/order_menu_steps/_order_menu_step_2.html' %}
+					{% endblock  %}
+
+					{% block order_menu_step_3 %}
+						{% include 'app_shop/inc/order_menu_steps/_order_menu_step_3.html' %}
+					{% endblock  %}
+
+					{% block order_menu_step_4 %}
+						{% include 'app_shop/inc/order_menu_steps/_order_menu_step_4.html' %}
+					{% endblock  %}
+				</form>
+				
+			</div>
+		</div>
+	</div>
+
+</div>
+{% endblock  %}

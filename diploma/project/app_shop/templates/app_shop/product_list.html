@@ -52,7 +52,7 @@
           </div>
 
           <div class="Sort-variants">
-            <a class="Sort-sortBy Sort-sortBy_dec" href="#">Популярности</a>
+            <a class="Sort-sortBy Sort-sortBy_dec" href="{% url 'products_order_by_views' %}">Популярности</a>
             <a class="Sort-sortBy" href="{% url 'products_order_by_price' %}">Цене</a>
             <a class="Sort-sortBy" href="#">Отзывам</a>
             <a class="Sort-sortBy Sort-sortBy_inc" href="{% url 'products_order_by_date' %}">Новизне</a>

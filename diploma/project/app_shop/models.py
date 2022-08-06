@@ -1,7 +1,12 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-from django.utils import timezone
 from django.urls import reverse_lazy
+
+from time import time
+from mptt.models import MPTTModel, TreeForeignKey
+
+from app_profile.models import Profile
+from app_profile.validators import phone_number_validator
 
 from . import utility
 from . import tools
@@ -13,16 +18,26 @@ class Category(utility.StrMixin, models.Model):
     title = models.CharField(max_length=150, unique=True, verbose_name=_('title'))
 
 
+class CategoryMPTT(utility.StrMixin, MPTTModel):
+    title = models.CharField(max_length=150, unique=True, verbose_name=_('title'))
+    parent = TreeForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='children')
+    
+    class MPTTMeta:
+        order_insertion_by = ['title']
+
+
 class Product(utility.StrMixin, models.Model):
     title = models.CharField(max_length=150, unique=True, verbose_name=_('title'))
     slug = models.SlugField(max_length=150,verbose_name=_('slug'), blank=True)
-    category = models.ForeignKey(Category, on_delete=models.SET_NULL, blank=True, null=True, verbose_name=_('category'))
+    category = models.ForeignKey(CategoryMPTT, on_delete=models.SET_NULL, blank=True, null=True, verbose_name=_('category'))
     tag = models.ManyToManyField('Tag', verbose_name=_('tag(s)'))
     price = models.DecimalField(max_digits=6, decimal_places=2, verbose_name=_('price'))
     description = models.TextField(blank=True, verbose_name=_('description'))
+    images = models.ManyToManyField('ProductImage', related_name='images', verbose_name=_('image(s)'))
     characteristic = models.TextField(blank=True ,verbose_name=_('characteristic'))
     other_characteristic = models.TextField(blank=True ,verbose_name=_('other characteristic'))
     additional_info = models.TextField(blank=True, verbose_name=_('additional info'))
+    views = models.PositiveIntegerField(default=0, verbose_name=_('views'))
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('created at'))
     updated_at = models.DateTimeField(auto_now=True, verbose_name=_('updated at'))
 
@@ -36,3 +51,60 @@ class Product(utility.StrMixin, models.Model):
 
 class Tag(utility.StrMixin, models.Model):
     title = models.CharField(max_length=150, unique=True, verbose_name=_('title'))
+    
+    
+class ProductImage(utility.StrMixin, models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, blank=True, null=True, verbose_name=_('product'))
+    title = models.CharField(max_length=170, blank=True, unique=True, verbose_name=_('title'))
+    image = models.ImageField(upload_to=tools.get_path, verbose_name=_('image'))
+    content_image = models.BooleanField(default=False, verbose_name=_('content image'))
+    
+    def save(self, *args, **kwargs):
+        self.title = self.product.title + '_{}'.format(int(time()))
+        return super().save(*args, **kwargs)
+    
+    
+class ProductComment(models.Model):
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE, verbose_name=_('profile'))
+    product = models.ForeignKey(Product, blank=True, null=True, on_delete=models.CASCADE, verbose_name=_('product'))
+    comment = models.TextField(verbose_name=('comment'))
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('created at'))
+    
+    def __str__(self):
+        return '{} about {}'.format(self.profile.user.username, self.product.title)
+    
+    
+class ProductStorage(models.Model):
+    product = models.ForeignKey(Product, unique=True, on_delete=models.SET_NULL, null=True, verbose_name=_('product'))
+    count = models.PositiveIntegerField(default=0, verbose_name=_('count'))
+    
+    def __str__(self):
+        return '{}: {}'.format(self.product.title, self.count)
+    
+    
+class Order(models.Model):
+    profile = models.ForeignKey(Profile, blank=True, null=True, on_delete=models.CASCADE, verbose_name=_('profile'))
+    product_order = models.ManyToManyField('ProductOrder', verbose_name=_('product order'))
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('created at'))
+    telephon_number = models.CharField(max_length=12, blank=True, validators=(phone_number_validator, ), verbose_name=_('telephon_number'))
+    address = models.CharField(max_length=150, blank=True, verbose_name=_('address'))
+    city = models.CharField(max_length=100, blank=True, verbose_name=_('city'))
+    pay = models.CharField(max_length=10, blank=True, null=True, choices=(
+        ('ONLINE', 'online'),
+        ('SOMEONE', 'someone'),
+        ))
+    delivery = models.CharField(max_length=10, blank=True, null=True, choices=(
+        ('ORDINARY', 'ordinary'),
+        ('EXPRESS', 'express'),
+        ))
+    
+    def __str__(self):
+        return 'order: {}/id: {}'.format(self.profile, self.pk)
+    
+    
+class ProductOrder(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.PROTECT, verbose_name=_('product'))
+    count = models.PositiveIntegerField(default=1, verbose_name=_('count'))
+    
+    def __str__(self):
+        return '{}: {}'.format(self.product.title, self.count)

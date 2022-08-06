@@ -53,3 +53,38 @@ def set_filter(instance, filter_name, init_value=None):
         
     return filters
         
+        
+def get_path(instance, filename):
+    format_img = filename.split('.')[-1]
+    return 'app_shop/{}/{}.{}'.format(
+        instance.product.title,
+        instance.title,
+        format_img
+    )
+    
+    
+def add_product_to_basket(product, count=1):
+    basket = cache.get('basket', dict())
+    if product not in basket:
+        basket[product]=count
+        cache.set('basket', basket)
+    return None
+
+
+def add_count_product_to_basket(dict_GET):
+    basket = cache.get('basket')
+    product_dict = {product.title: product for product in basket}
+    for key in dict_GET:
+        product_title = key.split('_')[0]
+        product = product_dict.get(product_title)
+        basket[product] = dict_GET.get(key)
+    cache.set('basket', basket)
+    return None
+        
+
+def delete_product_from_basket(product):
+    basket = cache.get('basket', dict())
+    if product in basket:
+        basket.pop(product)
+        cache.set('basket', basket)
+    return None

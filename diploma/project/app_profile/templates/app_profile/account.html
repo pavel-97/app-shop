@@ -43,7 +43,11 @@
 						<div class="Account-column">
 
 							<div class="Account-avatar">
-								<img src="{% static 'assets/img/content/home/card.jpg' %}" alt="card.jpg">
+								{% if profile.avatar %}
+								<img src="{{profile.avatar.url}}" alt="card.jpg">
+								{% else %}
+								<img src="" alt="card.jpg">
+								{% endif %}
 							</div>
 
 						</div>

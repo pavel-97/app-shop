@@ -6,7 +6,7 @@
       
       <a class="CartBlock-block" href="{% url 'basket' %}">
         <img class="CartBlock-img" src="{% static 'assets/img/icons/cart.svg'%}" alt="cart.svg"/>
-        <span class="CartBlock-amount">0</span>
+        <span class="CartBlock-amount">{{basket|length}}</span>
       </a>
       
       <div class="CartBlock-block">
