@@ -27,8 +27,8 @@ class ProductListView(
     utility.CategoryContextMixin,
     utility.BasketContextMixin,
     utility.ProductQuerysetFilterMixin,
-    utility.ProductListOrderByMixin,
     utility.SearchMixin,
+    utility.ProductListOrderByMixin,
     ListView
     ):
     model = models.Product
@@ -38,8 +38,8 @@ class ProductListOrderByDateListView(
     utility.CategoryContextMixin,
     utility.BasketContextMixin,
     utility.ProductQuerysetFilterMixin,
-    utility.ProductListOrderByMixin,
     utility.SearchMixin,
+    utility.ProductListOrderByMixin,
     ListView
     ):
     model = models.Product
@@ -50,8 +50,8 @@ class ProductListOrderByPriceListView(
     utility.CategoryContextMixin,
     utility.BasketContextMixin,
     utility.ProductQuerysetFilterMixin,
-    utility.ProductListOrderByMixin,
     utility.SearchMixin,
+    utility.ProductListOrderByMixin,
     ListView
     ):
     model = models.Product
@@ -62,12 +62,54 @@ class ProductListOrderByViewsListView(
     utility.CategoryContextMixin,
     utility.BasketContextMixin,
     utility.ProductQuerysetFilterMixin,
-    utility.ProductListOrderByMixin,
     utility.SearchMixin,
+    utility.ProductListOrderByMixin,
     ListView
     ):
     model = models.Product
     field = '-views'
+    
+    
+class CategoryView(
+    utility.CategoryMixin,
+    utility.CategoryContextMixin,
+    utility.ProductQuerysetFilterMixin,
+    utility.BasketContextMixin,
+    utility.SearchMixin,
+    utility.ProductListOrderByMixin,
+    ListView,
+    ):
+    model = models.Product
+    template_name = 'app_shop/category.html'
+    field = '-views'
+    
+
+class CategoryOrderByPriceView(
+    utility.CategoryMixin,
+    utility.CategoryContextMixin,
+    utility.BasketContextMixin,
+    utility.ProductQuerysetFilterMixin,
+    utility.SearchMixin,
+    utility.ProductListOrderByMixin,
+    ListView
+    ):
+    model = models.Product
+    template_name = 'app_shop/category.html'
+    field = '-price'
+    
+    
+class CategoryOrderByDateView(
+    utility.CategoryMixin,
+    utility.CategoryContextMixin,
+    utility.BasketContextMixin,
+    utility.ProductQuerysetFilterMixin,
+    utility.SearchMixin,
+    utility.ProductListOrderByMixin,
+    ListView
+    ):
+    model = models.Product
+    template_name = 'app_shop/category.html'
+    field = '-updated_at'
 
 
 class ProductDetailView(utility.CategoryContextMixin, utility.BasketContextMixin, DetailView):
@@ -136,7 +178,8 @@ class MakeOrder(utility.CategoryContextMixin, utility.BasketContextMixin, utilit
         if form.is_valid():
             form.save(request)
             return render(request, 'app_shop/progress_payment.html', self.get_context_data())
-        print(form.errors)
         context = self.get_context_data()
         context['form'] = form
         return render(request, self.template_name, context)
+    
+    

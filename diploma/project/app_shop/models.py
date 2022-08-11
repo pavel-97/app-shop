@@ -20,7 +20,12 @@ class Category(utility.StrMixin, models.Model):
 
 class CategoryMPTT(utility.StrMixin, MPTTModel):
     title = models.CharField(max_length=150, unique=True, verbose_name=_('title'))
+    slug = models.SlugField(blank=True, verbose_name=_('slug'))
     parent = TreeForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='children')
+    
+    def save(self, *args, **kwargs):
+        self.slug = tools.make_slug(self.title)
+        return super().save(*args, **kwargs)
     
     class MPTTMeta:
         order_insertion_by = ['title']
@@ -40,6 +45,8 @@ class Product(utility.StrMixin, models.Model):
     views = models.PositiveIntegerField(default=0, verbose_name=_('views'))
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('created at'))
     updated_at = models.DateTimeField(auto_now=True, verbose_name=_('updated at'))
+    is_exist = models.BooleanField(default=True, verbose_name=_('is exist'))
+    free_delivery = models.BooleanField(default=False, verbose_name=_('free delivery'))
 
     def save(self, *args, **kwargs):
         self.slug = tools.make_slug(self.title)

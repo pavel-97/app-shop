@@ -8,6 +8,7 @@ django = "2.2"
 transliterate = "*"
 pillow = "*"
 django-mptt = "*"
+requests = "*"
 
 [dev-packages]
 django-debug-toolbar = "*"

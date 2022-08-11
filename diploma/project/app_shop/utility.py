@@ -2,6 +2,7 @@ from django.core.cache import cache
 from django.views.generic import View
 from django.shortcuts import render
 from django.db.models import Min, Max
+from django.core.paginator import Paginator
 
 from . import tools
 from . import decorators
@@ -52,12 +53,14 @@ class ProductQuerysetFilterMixin:
     
     @decorators.except_attr_error_with_arg(return_object=dict())
     def get_filters(self):
-        price_range, title_filter = [self.request.GET.get(_) for _ in ('price', 'title')]
-        price_min, price_max = [int(_) for _ in price_range.split(';')]
+        price_range, title_filter, is_exist, free_delivery = (self.request.GET.get(_) for _ in ('price', 'title', 'is_exist', 'free_delivery'))
+        price_min, price_max = (int(_) for _ in price_range.split(';'))
         return {
             'title__icontains': title_filter,
             'price__lte': price_max,
             'price__gte': price_min,
+            # 'is_exist': bool(is_exist),
+            # 'free_delivery': bool(free_delivery),
         }
     
     def get_queryset(self):
@@ -104,3 +107,16 @@ class View(View):
     
     def get(self, request, *args, **kwargs):
         return render(request, self.template_name, self.get_context_data(**kwargs))
+    
+        
+class CategoryMixin:
+    def get_queryset(self):
+        category = models.CategoryMPTT.objects.get(slug=self.kwargs.get('slug'))
+        childrens = category.get_leafnodes()
+        queryset = super().get_queryset()
+        return queryset.filter(**({'category__in':childrens} if childrens else {'category':category}))
+    
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context['category'] = models.CategoryMPTT.objects.get(slug=self.kwargs.get('slug'))
+        return context
