@@ -1,0 +1,29 @@
+{% load static %}
+
+{% load favorite_category %}
+
+  <div class="Section">
+    <div class="wrap">
+      <div class="BannersHome">
+
+        {% for category in categories|favorite_categories %}
+        <a class="BannersHomeBlock" href="#">  
+          <div class="BannersHomeBlock-row"> 
+            <div class="BannersHomeBlock-block">
+              <strong class="BannersHomeBlock-title">{{category}}</strong>
+              <div class="BannersHomeBlock-content">
+                from&#32;<span class="BannersHomeBlock-price">${{category.product__price__min}}</span>
+              </div>
+            </div>
+            <div class="BannersHomeBlock-block">
+              <div class="BannersHomeBlock-img">
+                <img src="{% static 'assets/img/content/home/videoca.png' %}" alt="videoca.png"/>
+              </div>
+            </div>
+          </div>
+        </a>
+        {% endfor %}
+        
+      </div>
+    </div>
+  </div>

@@ -1,0 +1,92 @@
+{% load static %}
+
+
+  <header class="Header">
+    <div class="ControlPanel">
+      <div class="wrap">
+        <div class="row ControlPanel-row">
+          <div class="row-block">
+            <div class="row ControlPanel-rowSplit">
+              <div class="row-block">
+                <a class="ControlPanel-title" href="#">Free Delivery</a>
+              </div>
+              <div class="row-block hide_700">
+                <span class="ControlPanel-title">Follow Us</span>
+                
+                {% include 'inc/_socials.html' %}
+                
+              </div>
+            </div>
+          </div>
+
+          {% block nav_profile %}
+            {% include 'inc/header/_nav_profile.html' %}
+          {% endblock  %}
+
+        </div>
+      </div>
+      <!--+div.menuModal#navigate
+      //    +menu([
+      //        ['Главная','index.html'],
+      //        ['Портфолио','index.html'],
+      //        ['Мои проекты','index.html'],
+      //        ['Контакты','index.html']
+      //    ], page === 'article'? 'Портфолио': 'Главная')._main
+      
+      block
+      -->
+    </div>
+
+    <div class="wrap">
+      <div class="row Header-rowMain">
+ 
+        {% block logo %}
+          <div class="row-block Header-logo">
+
+            {% with img_name='logo'  %}
+              {% include 'inc/_logo.html' %}
+            {% endwith %}
+          
+          </div>
+        {% endblock  %}
+
+        {% block 'nav' %}
+          {% include 'inc/header/_nav.html' %}
+        {% endblock %}
+
+        {% block 'basket' %}
+          {% include 'inc/header/_basket.html' %}
+        {% endblock %}
+
+        <div class="row-block Header-trigger">
+          <a class="menuTrigger" href="#navigate">
+            <div class="menuTrigger-content">
+              Показать навигацию
+            </div>
+            <span></span>
+            <span></span>
+            <span></span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="Header-searchWrap">
+      <div class="wrap">
+      
+        {% block 'categories' %}
+          {% include 'inc/header/_categories.html' %}
+        {% endblock  %}
+
+        <div class="Header-searchLink">
+          <img src="{% static 'assets/img/icons/search.svg' %}" alt="search.svg"/>
+        </div>
+
+        {% block 'search' %}
+          {% include 'inc/header/_search.html' %}
+        {% endblock  %}
+        
+      </div>
+    </div>
+    
+  </header>

@@ -1,0 +1,7 @@
+  <div class="ProductCard-text">
+    <ul>
+      {% for characteristic in characteristics|slice:3 %}
+      <li>{{characteristic}}</li>
+      {% endfor %}
+    </ul>
+  </div>

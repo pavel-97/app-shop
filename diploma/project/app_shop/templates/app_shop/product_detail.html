@@ -1,0 +1,110 @@
+{% extends 'app_shop/app_shop_base.html' %}
+
+{% load static %}
+
+{% load content_image %}
+
+{% block main %}
+<div class="Middle Middle_top">
+
+  {% with title='Megano Product' span='Product' %}
+    {% include 'inc/header/_middle.html' %}
+  {% endwith %}
+
+  <div class="Section">
+    <div class="wrap">
+      <div class="Product">
+        <div class="ProductCard">
+
+          <div class="ProductCard-look">
+            <div class="ProductCard-photo">
+              <img src="{{product|content_image}}" alt="bigGoods.png">
+            </div>
+            <div class="ProductCard-picts">
+              {% for image in product.images.all %}              
+              <a class="ProductCard-pict ProductCard-pict_ACTIVE" href="{{image.image.url}}">
+                <img src="{{image.image.url}}" alt="bigGoods.png">
+              </a>
+              {% endfor %}
+            </div>
+
+          </div>
+
+          <div class="ProductCard-desc">
+            <div class="ProductCard-header">
+              <h2 class="ProductCard-title">{{product.title}}</h2>
+              <div class="ProductCard-info">
+                <div class="ProductCard-cost">
+                  <div class="ProductCard-price">
+                    ${{product.price}}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {% block 'characteristics' %}
+              {% include 'app_shop/inc/_characteristics.html' %}
+            {% endblock  %}
+
+
+            <div class="ProductCard-cart">
+              <div class="ProductCard-cartElement ProductCard-cartElement_amount">
+                <div class="Amount Amount_product">
+                  <button class="Amount-remove" type="button"></button>
+                  <input class="Amount-input form-input" name="amount" type="text" value="1">
+                  <button class="Amount-add" type="button"></button>
+                </div>
+              </div>
+              <div class="ProductCard-cartElement">
+                <a class="btn btn_primary" href="{% url 'add_product_in_basket' slug=product.slug %}">
+                  <img class="btn-icon" src="{% static 'assets/img/icons/card/cart_white.svg' %}" alt="cart_white.svg">
+                  <span class="btn-content">Add To Cart</span>
+                </a>
+              </div>
+            </div>
+            
+            {% block 'tags' %}
+            {% include 'app_shop/inc/_tags.html' %}
+            {% endblock  %}
+
+          </div>
+        </div>
+
+        <div class="Tabs Tabs_default">
+          <div class="Tabs-links">
+            <a class="Tabs-link_ACTIVE Tabs-link" href="#description">
+              <span>Description</span>
+            </a>
+            <a class="Tabs-link" href="#addit">
+              <span>AdditionaL Info</span>
+            </a>
+            <a class="Tabs-link" href="#reviews">
+                <span>Reviews ({{comments|length}})</span>
+            </a>
+          </div>
+          
+          <div class="Tabs-wrap">
+
+            {% block 'other_characteristics' %}
+              {% include 'app_shop/inc/_other_chracteristics.html' %}
+            {% endblock %}
+
+            {% block 'additional_info' %}
+              {% include 'app_shop/inc/_additional_info.html' %}
+            {% endblock %}
+
+            {% if request.user.is_authenticated %}
+            
+            {% block comment %}
+              {% include 'app_shop/inc/_comment.html' %}
+            {% endblock  %}
+            
+            {% endif %}
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock  %}

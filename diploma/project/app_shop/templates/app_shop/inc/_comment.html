@@ -1,0 +1,38 @@
+<div class="Tabs-block" id="reviews">
+	
+	<header class="Section-header">
+		<h3 class="Section-title">{{comments|length}} Reviews</h3>
+	</header>
+	
+	{% for comment in comments %}
+	<div class="Comments">
+		<div class="Comment">
+			<div class="Comment-column Comment-column_pict">
+				<div class="Comment-avatar"></div>
+			</div>
+			<div class="Comment-column">
+	
+				<header class="Comment-header">
+					<div>
+						<strong class="Comment-title">{{comment.profile}}</strong><span class="Comment-date">{{comment.created_at}}</span>
+					</div>
+				</header>
+	
+				<div class="Comment-content">
+					{{comment.comment}}
+				</div>
+	
+			</div>
+		</div>
+	</div>
+	{% endfor %}
+
+	<header class="Section-header Section-header_product">
+		<h3 class="Section-title">Add Review</h3>
+	</header>
+	
+	{% block form_comment %}
+		{% include 'app_shop/inc/_form_comment.html' %}
+	{% endblock  %}
+
+</div>
