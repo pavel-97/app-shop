@@ -54,7 +54,7 @@
           <div class="Sort-variants">
             <a class="Sort-sortBy Sort-sortBy_dec" href="{% url 'category_order_by_views' slug=category.slug %}">Популярности</a>
             <a class="Sort-sortBy" href="{% url 'category_order_by_price' slug=category.slug %}">Цене</a>
-            <a class="Sort-sortBy" href="#">Отзывам</a>
+            <a class="Sort-sortBy" href="{% url 'category_order_by_comment' slug=category.slug %}">Отзывам</a>
             <a class="Sort-sortBy Sort-sortBy_inc" href="{% url 'category_order_by_date' slug=category.slug %}">Новизне</a>
           </div>
 

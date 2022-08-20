@@ -1,3 +1,4 @@
+import profile
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy as _
@@ -18,3 +19,11 @@ class Profile(models.Model):
     
     def __str__(self):
         return self.user.username
+    
+    
+class HistoryOrder(models.Model):
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE, blank=True, null=True, default=None, verbose_name=_('profile'))
+    orders = models.ManyToManyField('app_shop.Order', verbose_name=_('orders'))
+    
+    def __str__(self):
+        return 'history: {}'.format(self.profile.user.username)

@@ -14,10 +14,6 @@ from . import tools
 # Create your models here.
 
 
-class Category(utility.StrMixin, models.Model):
-    title = models.CharField(max_length=150, unique=True, verbose_name=_('title'))
-
-
 class CategoryMPTT(utility.StrMixin, MPTTModel):
     title = models.CharField(max_length=150, unique=True, verbose_name=_('title'))
     slug = models.SlugField(blank=True, verbose_name=_('slug'))
@@ -28,7 +24,7 @@ class CategoryMPTT(utility.StrMixin, MPTTModel):
         return super().save(*args, **kwargs)
     
     class MPTTMeta:
-        order_insertion_by = ['title']
+        order_insertion_by = ('title', )
 
 
 class Product(utility.StrMixin, models.Model):
@@ -96,6 +92,7 @@ class Order(models.Model):
     telephon_number = models.CharField(max_length=12, blank=True, validators=(phone_number_validator, ), verbose_name=_('telephon_number'))
     address = models.CharField(max_length=150, blank=True, verbose_name=_('address'))
     city = models.CharField(max_length=100, blank=True, verbose_name=_('city'))
+    total_price = models.DecimalField(max_digits=7, decimal_places=2, default=0, verbose_name=_('total price'))
     pay = models.CharField(max_length=10, blank=True, null=True, choices=(
         ('ONLINE', 'online'),
         ('SOMEONE', 'someone'),

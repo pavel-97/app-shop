@@ -1,8 +1,7 @@
 from django.core.cache import cache
 from django.views.generic import View
 from django.shortcuts import render
-from django.db.models import Min, Max
-from django.core.paginator import Paginator
+from django.db.models import Min, Max, Count
 
 from . import tools
 from . import decorators
@@ -34,7 +33,7 @@ class ProductListOrderByMixin:
             )
     
     def get_queryset(self):
-        queryset = super().get_queryset().prefetch_related('tag').prefetch_related('images')
+        queryset = super().get_queryset().prefetch_related('tag').prefetch_related('images').annotate(Count('productcomment'))
         field = cache.get_or_set(tools.format_name_class('field', self), self.field)
         field_reverse = cache.get_or_set(tools.format_name_class('field_reverse', self), self.field_reverse)
         
@@ -51,7 +50,7 @@ class ProductListOrderByMixin:
 
 class ProductQuerysetFilterMixin:
     
-    @decorators.except_attr_error_with_arg(return_object=dict())
+    @decorators.except_error_with_arg(return_object=dict())
     def get_filters(self):
         price_range, title_filter, is_exist, free_delivery = (self.request.GET.get(_) for _ in ('price', 'title', 'is_exist', 'free_delivery'))
         price_min, price_max = (int(_) for _ in price_range.split(';'))
@@ -59,18 +58,17 @@ class ProductQuerysetFilterMixin:
             'title__icontains': title_filter,
             'price__lte': price_max,
             'price__gte': price_min,
-            # 'is_exist': bool(is_exist),
-            # 'free_delivery': bool(free_delivery),
-        }
+        } | ({
+            'is_exist': bool(is_exist),
+            'free_delivery': bool(free_delivery),
+            } if (is_exist, free_delivery) else dict())
     
     def get_queryset(self):
-        
         filters = tools.set_filter(
             self,
             'filters',
             self.get_filters()
             )
-
         return super().get_queryset().filter(**filters)
     
     
@@ -86,15 +84,15 @@ class SearchMixin:
     
     
 class BasketContextMixin:
-    def get_context_data(self, *args, **kwargs):
-        context = super().get_context_data(*args, **kwargs)
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
         context['basket'] = cache.get('basket', dict())
         return context
     
 
 class CategoryContextMixin:
-    def get_context_data(self, *args, **kwargs):
-        context = super().get_context_data(*args, **kwargs)
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
         context['categories'] = models.CategoryMPTT.objects.annotate(Min('product__price')).annotate(Max('product__views'))
         return context
     

@@ -1,9 +1,9 @@
-from django.forms import ModelForm, Textarea, TextInput, IntegerField
+from django.forms import ModelForm, Textarea, TextInput
 from django.core.cache import cache
 from django.core.exceptions import ValidationError
 from django.db.models import F
 
-from app_profile.models import Profile
+from app_profile.models import Profile, HistoryOrder
 
 from . import models
 from . import decorators
@@ -12,12 +12,12 @@ from . import decorators
 class CommentForm(ModelForm):
     
     def save(self, request, slug, *args, **kwargs):
-        models.ProductComment.objects.create(
+        comment = models.ProductComment.objects.create(
             profile=Profile.objects.get(user=request.user),
             product=models.Product.objects.get(slug=slug),
             comment=self.cleaned_data.get('comment')
         )
-        return super().save(*args, **kwargs)
+        return comment
 
     class Meta:
         model = models.ProductComment
@@ -62,8 +62,17 @@ class MakeOrderForm(ModelForm):
         return order_set
     
     def add_product_order(self, order, set_product_order):
+        total_price = 0
         for product_order in set_product_order:
             order.product_order.add(product_order)
+            total_price += (product_order.product.price * int(product_order.count))
+        order.total_price = total_price
+        order.save()
+        return None
+    
+    def add_history_order(self, request, order):
+        history_order, _ = HistoryOrder.objects.get_or_create(profile=request.user.profile)
+        history_order.orders.add(order)
         return None
     
     @decorators.delete_basket
@@ -76,6 +85,7 @@ class MakeOrderForm(ModelForm):
             **self.cleaned_data,
         )
         self.add_product_order(order, set_product_order)
+        self.add_history_order(request, order)
         return order
     
     class Meta:

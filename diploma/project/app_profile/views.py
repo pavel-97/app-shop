@@ -1,10 +1,12 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView, LogoutView
 from django.urls import reverse_lazy
 from django.views.generic import UpdateView
+from django.core.cache import cache
 
 from app_shop.utility import BasketContextMixin ,View, CategoryContextMixin
+from app_shop.models import Product
 
 from . import models
 from . import forms
@@ -36,7 +38,7 @@ class ProfileView(LoginRequiredMixin, BasketContextMixin, CategoryContextMixin, 
     def get_object(self):
         return self.model.objects.get(user=self.request.user)
     
-    def get_success_url(self) -> str:
+    def get_success_url(self):
         return reverse_lazy('account')
     
     def post(self, request, *args, **kwargs):
@@ -48,9 +50,25 @@ class ProfileView(LoginRequiredMixin, BasketContextMixin, CategoryContextMixin, 
         
 class HistoryOrderView(LoginRequiredMixin, BasketContextMixin, CategoryContextMixin, View):
     template_name = 'app_profile/history_order.html'
+    model = models.HistoryOrder
+    
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context['history_order'] = self.model.objects.get(profile=self.request.user.profile)
+        return context
     
     
-class ProfileLoginView(CategoryContextMixin, LoginView):
+class HistoryReviewView(LoginRequiredMixin, BasketContextMixin, CategoryContextMixin, View):
+    template_name = 'app_profile/history_review.html'
+    
+    def get_context_data(self, *args, **kwargs):
+        context =  super().get_context_data(*args, **kwargs)
+        review = cache.get('review', list())
+        context['review'] = Product.objects.filter(pk__in=[product.pk for product in review]).prefetch_related('tag').prefetch_related('images')
+        return context
+    
+    
+class ProfileLoginView(BasketContextMixin, CategoryContextMixin, LoginView):
     template_name = 'app_profile/login.html'
     authentication_form = forms.LoginForm
     
@@ -74,3 +92,4 @@ class ProfileRegistrationView(BasketContextMixin, CategoryContextMixin, View):
         if form.is_valid():
             return form.save(request)
         return render(request, 'app_profile/registration.html', context)
+    

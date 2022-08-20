@@ -1,8 +1,7 @@
 from django.shortcuts import render, redirect
 from django.views.generic import DetailView, ListView
 from django.urls import reverse_lazy
-from django.contrib.auth.decorators import login_required
-from django.core.cache import cache
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from . import tools
 from . import models
@@ -70,6 +69,18 @@ class ProductListOrderByViewsListView(
     field = '-views'
     
     
+class ProductListOrderByCommentListView(
+    utility.CategoryContextMixin,
+    utility.BasketContextMixin,
+    utility.ProductQuerysetFilterMixin,
+    utility.SearchMixin,
+    utility.ProductListOrderByMixin,
+    ListView
+    ):
+    model = models.Product
+    field = '-productcomment__count'
+    
+    
 class CategoryView(
     utility.CategoryMixin,
     utility.CategoryContextMixin,
@@ -110,6 +121,20 @@ class CategoryOrderByDateView(
     model = models.Product
     template_name = 'app_shop/category.html'
     field = '-updated_at'
+    
+    
+class CategoryOrderByCommentView(
+    utility.CategoryMixin,
+    utility.CategoryContextMixin,
+    utility.BasketContextMixin,
+    utility.ProductQuerysetFilterMixin,
+    utility.SearchMixin,
+    utility.ProductListOrderByMixin,
+    ListView
+    ):
+    model = models.Product
+    template_name = 'app_shop/category.html'
+    field = '-productcomment__count'
 
 
 class ProductDetailView(utility.CategoryContextMixin, utility.BasketContextMixin, DetailView):
@@ -129,16 +154,18 @@ class ProductDetailView(utility.CategoryContextMixin, utility.BasketContextMixin
         context['form'] = self.form()
         return context
     
+    @decorators.add_review
     @decorators.add_view
     def get(self, request, *args, **kwargs):
         return super().get(request, *args, **kwargs)
     
-    @login_required(login_url=reverse_lazy('login'))
+    @decorators.permission_denied
     def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
         form = self.form(request.POST)
-        context = dict(form=form)
+        context = dict(form=form) | self.get_context_data()
         if form.is_valid():
-            form.save(request, slug=kwargs.get('slug'),commit=False)
+            form.save(request, slug=kwargs.get('slug'))
             return redirect(reverse_lazy('product', kwargs={'slug': kwargs.get('slug')}))
         return render(request, 'app_shop/product_detail.html', context)
     
@@ -150,7 +177,7 @@ class AddProductInBasketView(utility.View):
     def get(self, request, slug):
         product = models.Product.objects.prefetch_related('images').get(slug=slug)
         tools.add_product_to_basket(product)
-        return redirect(reverse_lazy('product', kwargs={'slug':slug}))
+        return redirect(request.META.get('HTTP_REFERER'))
     
     
 class DeleteProductFromBasket(utility.View):
@@ -160,7 +187,7 @@ class DeleteProductFromBasket(utility.View):
         return redirect(reverse_lazy('basket'))
     
     
-class MakeOrder(utility.CategoryContextMixin, utility.BasketContextMixin, utility.View):
+class MakeOrder(LoginRequiredMixin, utility.CategoryContextMixin, utility.BasketContextMixin, utility.View):
     template_name = 'app_shop/order.html'
     form = forms.MakeOrderForm
     
@@ -169,8 +196,9 @@ class MakeOrder(utility.CategoryContextMixin, utility.BasketContextMixin, utilit
         context['form'] = self.form(instance=self.request.user.profile)
         return context
     
+    @decorators.except_error_with_arg(return_object=redirect, to='basket')
     def get(self, request, *args, **kwargs):
-        tools.add_count_product_to_basket(request.GET)         
+        tools.add_count_product_to_basket(request.GET)
         return super().get(request, *args, **kwargs)
     
     def post(self, request):
