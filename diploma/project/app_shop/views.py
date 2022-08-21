@@ -210,4 +210,3 @@ class MakeOrder(LoginRequiredMixin, utility.CategoryContextMixin, utility.Basket
         context['form'] = form
         return render(request, self.template_name, context)
     
-    

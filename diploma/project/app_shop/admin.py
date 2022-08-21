@@ -19,6 +19,7 @@ class ProductAdmin(admin.ModelAdmin):
     list_display = ('title', 'get_content_image', 'price', 'updated_at')
     search_fields = ('title', 'category', )
     list_filter = ('is_exist', 'free_delivery', )
+    readonly_fields = ('views', )
     
     def get_content_image(self, obj):
         images = obj.images.all()
