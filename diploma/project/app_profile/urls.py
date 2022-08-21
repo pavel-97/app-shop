@@ -10,4 +10,5 @@ urlpatterns = [
     path('registation/', views.ProfileRegistrationView.as_view(), name='registation'),
     path('profile/', views.ProfileView.as_view(), name='profile'),
     path('history_order/', views.HistoryOrderView.as_view(), name='history_order'),
+    path('history_review/', views.HistoryReviewView.as_view(), name='history_review'),
 ]

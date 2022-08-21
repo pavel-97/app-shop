@@ -4,6 +4,8 @@
 
 {% load content_image %}
 
+{% load total_price %}
+
 {% block main %}
 <div class="Middle Middle_top">
     
@@ -58,12 +60,13 @@
             
             <div class="Cart-block Cart-block_total">
               <strong class="Cart-title">Итого:</strong>
-              <span class="Cart-price">200.99$</span>
+              <span class="Cart-price">{{basket|total_price}}$</span>
             </div>
             
             <div class="Cart-block">
               <button class="btn btn_success btn_lg">Оформить заказ</button>
             </div>
+
           </div>
           {{form.errors}}
         </form>

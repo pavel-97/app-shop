@@ -1,0 +1,43 @@
+{% extends 'app_profile/app_profile_base.html' %}
+
+{% block main %}
+	{% with title='История просмотров' span='История просмотров' %}
+		{% include 'inc/header/_middle.html' %}
+	{% endwith %}
+
+	<div class="Section Section_column Section_columnLeft">
+	
+		<div class="wrap">
+	
+			<div class="Section-column">
+	
+				<div class="Section-columnSection">
+	
+					<header class="Section-header">
+						<strong class="Section-title">Навигация</strong>
+					</header>
+
+					<div class="Section-columnContent">
+					
+						{% block navigate_profile %}
+							{% include 'app_profile/inc/_navigate_profile.html' %}
+						{% endblock %}
+
+					</div>
+
+				</div>
+
+			</div>
+
+			<div class="Section-content">
+			
+				<div class="Orders">
+					{% include 'app_profile/inc/_history_review_card.html' %}
+				</div>
+
+			</div>
+
+		</div>
+
+	</div>
+{% endblock  %}

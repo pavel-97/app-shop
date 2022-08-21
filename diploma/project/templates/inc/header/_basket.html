@@ -1,5 +1,7 @@
 {% load static %}
 
+{% load total_price %}
+
   <div class="row-block">
 
     <div class="CartBlock">
@@ -10,7 +12,7 @@
       </a>
       
       <div class="CartBlock-block">
-        <span class="CartBlock-price">0.00$</span>
+        <span class="CartBlock-price">{{basket|total_price}}$</span>
       </div>
 
     </div>

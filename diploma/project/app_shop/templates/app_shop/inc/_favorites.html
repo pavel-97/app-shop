@@ -7,7 +7,7 @@
       <div class="BannersHome">
 
         {% for category in categories|favorite_categories %}
-        <a class="BannersHomeBlock" href="#">  
+        <a class="BannersHomeBlock" href="{% url 'category' slug=category.slug %}">  
           <div class="BannersHomeBlock-row"> 
             <div class="BannersHomeBlock-block">
               <strong class="BannersHomeBlock-title">{{category}}</strong>

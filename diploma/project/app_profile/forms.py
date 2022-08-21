@@ -34,18 +34,16 @@ class ProfileRegistrationForm(UserCreationForm):
         
         
 class ChangeProfileForm(forms.ModelForm):
+    avatar = forms.FileField(widget=forms.FileInput({'class': 'Profile-file form-input',
+                'id': 'avatar',
+                'data-validate': 'onlyImgAvatar',
+                'name': 'avatar',
+                'type': 'file',}))
     
     class Meta:
         model = models.Profile
         fields = ('avatar', 'telephon_number')
         widgets = {
-            'avatar': forms.ClearableFileInput(attrs={
-                'class': 'Profile-file form-input',
-                'id': 'avatar',
-                'data-validate': 'onlyImgAvatar',
-                'name': 'avatar',
-                'type': 'file',
-                }),
             'telephon_number': forms.TextInput(attrs={
                 'class': 'form-input',
                 'id': 'phone',
