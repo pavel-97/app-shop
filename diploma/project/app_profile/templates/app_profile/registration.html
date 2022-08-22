@@ -7,8 +7,20 @@
 			<div class="Section-content">
 				<form class="form" method="post">
 					{% csrf_token %}
-					{{form.as_p}}
-					<button type="submit">Зарегестрироваться</button>
+
+					{% for field in form %}
+            {{field.label}}
+            {{field}}
+            {{field.help_text}}
+
+            {% if field.errors %}
+              {{field.errors}}
+            {% endif %}
+          {% endfor %}
+
+          <div>
+            <button type="submit">Зарегестрироваться</button>
+          </div>
 				</form>
 			</div>
 		</div>

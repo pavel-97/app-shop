@@ -6,6 +6,7 @@ from django.db.models import F
 from app_profile.models import Profile, HistoryOrder
 
 from . import models
+from . import tools
 from . import decorators
 
 
@@ -40,7 +41,7 @@ class MakeOrderForm(ModelForm):
     def clean_count(self, *args, **kwargs):
         basket = cache.get('basket', dict())
         for product, count in basket.items():
-            storage = models.ProductStorage.objects.get(product=product)
+            storage = tools.get_or_error(models.ProductStorage, product)
             if storage.count < int(count):
                 raise ValidationError('Too biggest count ({}) for {}.'.format(
                     count,
@@ -61,6 +62,7 @@ class MakeOrderForm(ModelForm):
         order_set = tuple(order_set)
         return order_set
     
+    @decorators.include_delivery
     def add_product_order(self, order, set_product_order):
         total_price = 0
         for product_order in set_product_order:
@@ -68,7 +70,7 @@ class MakeOrderForm(ModelForm):
             total_price += (product_order.product.price * int(product_order.count))
         order.total_price = total_price
         order.save()
-        return None
+        return order
     
     def add_history_order(self, request, order):
         history_order, _ = HistoryOrder.objects.get_or_create(profile=request.user.profile)
@@ -87,12 +89,13 @@ class MakeOrderForm(ModelForm):
         self.add_product_order(order, set_product_order)
         self.add_history_order(request, order)
         return order
-    
+        
     class Meta:
         model = models.Order
-        fields = ('telephon_number', 'city', 'address')
+        fields = ('telephon_number', 'city', 'address', 'comment')
         widgets = {
             'telephon_number': TextInput(attrs={'class':'form-input'}, ),
             'city': TextInput(attrs={'class': 'form-input'}, ),
-            'address': Textarea(attrs={'class': 'form-input'}, )
+            'address': Textarea(attrs={'class': 'form-input'}, ),
+            'comment': Textarea(attrs={'class': 'form-input'}, )
         }

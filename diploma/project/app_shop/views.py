@@ -204,9 +204,16 @@ class MakeOrder(LoginRequiredMixin, utility.CategoryContextMixin, utility.Basket
     def post(self, request):
         form = self.form(request.POST)
         if form.is_valid():
-            form.save(request)
-            return render(request, 'app_shop/progress_payment.html', self.get_context_data())
-        context = self.get_context_data()
-        context['form'] = form
-        return render(request, self.template_name, context)
+            order = form.save(request)
+            return render(request, 'app_shop/payment.html', self.get_context_data() | {'order': order})
+        return render(request, self.template_name, self.get_context_data() | {'form': form})
     
+    
+class PayOrder(LoginRequiredMixin, utility.CategoryContextMixin, utility.BasketContextMixin, utility.View):
+    template_name = 'app_shop/progress_payment.html'
+    
+    def post(self, request, order_pk):
+        order = models.Order.objects.get(pk=order_pk)
+        order.card = request.POST.get('card')
+        order.save()
+        return render(request, self.template_name, self.get_context_data())

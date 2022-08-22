@@ -1,5 +1,6 @@
 from transliterate import translit, detect_language
 from django.core.cache import cache
+from django.core.exceptions import ValidationError, ObjectDoesNotExist
 
 from . import decorators
 
@@ -88,3 +89,11 @@ def delete_product_from_basket(product):
         basket.pop(product)
         cache.set('basket', basket)
     return None
+
+
+def get_or_error(model, product):
+    try:
+        obj = model.objects.get(product=product)
+    except ObjectDoesNotExist:
+        raise ValidationError('{} is absent in shop'.format(product.title))
+    return obj
