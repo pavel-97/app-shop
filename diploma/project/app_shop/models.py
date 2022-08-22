@@ -10,6 +10,7 @@ from app_profile.validators import phone_number_validator
 
 from . import utility
 from . import tools
+from . import validators
 
 # Create your models here.
 
@@ -93,6 +94,8 @@ class Order(models.Model):
     address = models.CharField(max_length=150, blank=True, verbose_name=_('address'))
     city = models.CharField(max_length=100, blank=True, verbose_name=_('city'))
     total_price = models.DecimalField(max_digits=7, decimal_places=2, default=0, verbose_name=_('total price'))
+    card = models.CharField(max_length=8, blank=True, validators=[validators.validate_card_length, validators.validate_card_even], verbose_name=_('card'))
+    comment = models.TextField(blank=True, verbose_name=_('comment'))
     pay = models.CharField(max_length=10, blank=True, null=True, choices=(
         ('ONLINE', 'online'),
         ('SOMEONE', 'someone'),

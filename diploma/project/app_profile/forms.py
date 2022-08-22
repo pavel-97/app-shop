@@ -1,3 +1,4 @@
+import email
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib.auth.models import User
@@ -38,11 +39,11 @@ class ChangeProfileForm(forms.ModelForm):
                 'id': 'avatar',
                 'data-validate': 'onlyImgAvatar',
                 'name': 'avatar',
-                'type': 'file',}))
-    
+                'type': 'file',}), required=False)
+        
     class Meta:
         model = models.Profile
-        fields = ('avatar', 'telephon_number')
+        fields = ('avatar', 'telephon_number', )
         widgets = {
             'telephon_number': forms.TextInput(attrs={
                 'class': 'form-input',
@@ -78,6 +79,11 @@ class ChangeUserForm(forms.ModelForm):
         'type': 'password',
         'placeholder': 'Повторите новый пароль',
     }), required=False)
+    
+    def change_mail(self, request):
+        user = request.user
+        if self.cleaned_data.get('email'): User.objects.filter(pk=request.user.pk).update(email=self.cleaned_data.get('email'))
+        return None
         
     def change_first_last_name(self, request):
         user = request.user
@@ -89,15 +95,15 @@ class ChangeUserForm(forms.ModelForm):
         return None
     
     def change_password(self, request):
-        print(self.cleaned_data)
         password, password_1 = self.cleaned_data.get('new_password'), self.cleaned_data.get('repeat_new_password')
-        if (password == password_1) and (password and password_1) is not None:
+        if (password == password_1) and (password and password_1) is True:
             user = request.user
             user.set_password(password)
             return user.save()
         return None
                 
     def save(self, request, *args, **kwargs):
+        self.change_mail(request)
         self.change_first_last_name(request)
         self.change_password(request)
         return None

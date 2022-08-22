@@ -31,7 +31,6 @@ class ProfileView(LoginRequiredMixin, BasketContextMixin, CategoryContextMixin, 
     
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
-        context['form'] = self.form_class(instance=self.request.user.profile)
         context['form_user'] = self.form_user(instance=self.request.user)
         return context
     
@@ -42,10 +41,12 @@ class ProfileView(LoginRequiredMixin, BasketContextMixin, CategoryContextMixin, 
         return reverse_lazy('account')
     
     def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
         form_user = self.form_user(request.POST)
         if form_user.is_valid():
             form_user.save(request)
-        return super().post(request, *args, **kwargs)
+            return super().post(request, *args, **kwargs)
+        return render(request, self.template_name, self.get_context_data() | {'form_user': form_user})
         
         
 class HistoryOrderView(LoginRequiredMixin, BasketContextMixin, CategoryContextMixin, View):
@@ -88,8 +89,7 @@ class ProfileRegistrationView(BasketContextMixin, CategoryContextMixin, View):
     
     def post(self, request):
         form = forms.ProfileRegistrationForm(request.POST)
-        context = dict(form=form,)
         if form.is_valid():
             return form.save(request)
-        return render(request, 'app_profile/registration.html', context)
+        return render(request, 'app_profile/registration.html', self.get_context_data() | {'form': form, })
     

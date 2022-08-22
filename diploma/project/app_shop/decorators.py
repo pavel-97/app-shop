@@ -79,3 +79,15 @@ def permission_denied(func):
             result = redirect(reverse_lazy('login'))
         return result
     return wrapper
+
+
+def include_delivery(func):
+    def wrapper(*args, **kwargs):
+        result = func(*args, **kwargs)
+        if all([product_order.product.free_delivery for product_order in result.product_order.all()]):
+            delivery = {'ORDINARY': 0, 'EXPRESS': 500}
+        else:    
+            delivery = {'ORDINARY': 200 if result.total_price < 2000 else 0, 'EXPRESS': 500}
+        result.total_price = F('total_price') + delivery.get(result.delivery)
+        return result
+    return wrapper
