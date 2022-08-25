@@ -1,5 +1,6 @@
+import email
 from django import forms
-from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, PasswordChangeForm, UserChangeForm
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
 from django.shortcuts import redirect
@@ -38,11 +39,11 @@ class ChangeProfileForm(forms.ModelForm):
                 'id': 'avatar',
                 'data-validate': 'onlyImgAvatar',
                 'name': 'avatar',
-                'type': 'file',}))
-    
+                'type': 'file',}), required=False)
+        
     class Meta:
         model = models.Profile
-        fields = ('avatar', 'telephon_number')
+        fields = ('avatar', 'telephon_number', )
         widgets = {
             'telephon_number': forms.TextInput(attrs={
                 'class': 'form-input',
@@ -53,77 +54,87 @@ class ChangeProfileForm(forms.ModelForm):
         }
         
 
-class ChangeUserForm(forms.ModelForm):
+class ChangeUserForm(PasswordChangeForm, forms.ModelForm):
+    email, first_name, last_name, old_password, new_password1, new_password2 = (
+        forms.CharField(widget=forms.TextInput(attrs={
+            'class': class_field,
+            'id': id_field,
+            'name': name_field,
+            'type': type_field,
+            'value': value_field,
+        }), required=False) for class_field, id_field, name_field, type_field, value_field in (
+            ('form-input', 'mail', 'mail', 'text', ''),
+            ('form-input', 'name', 'name', 'text', ''),
+            ('form-input', 'name', 'name', 'text', ''),
+            ('form-input', 'old_password', 'old_password', 'password', ''),
+            ('form-input', 'new_password1', 'new_password1', 'password', ''),
+            ('form-input', 'new_password2', 'new_password2', 'password', '')
+        )
+    )
     
-    first_last_name = forms.CharField(widget=forms.TextInput(attrs={
-        'class':'form-input',
-        'id':'name',
-        'name':'name',
-        'type':'text',
-        'value': '',
-    }), required=False)
-    
-    new_password = forms.CharField(widget=forms.TextInput(attrs={
-        'class': 'form-input',
-        'id': 'password',
-        'name':  'password',
-        'type': 'password',
-        'placeholder': 'Тут можно изменить пароль',
-    }), required=False)
-    
-    repeat_new_password = forms.CharField(widget=forms.TextInput(attrs={
-        'class': 'form-input',
-        'id': 'password',
-        'name':  'password',
-        'type': 'password',
-        'placeholder': 'Повторите новый пароль',
-    }), required=False)
+    # email = forms.CharField(widget=forms.TextInput(attrs={
+    #             'class': 'form-input',
+    #             'id': 'mail',
+    #             'name': 'mail',
+    #             'type': 'text',
+    #             }), required=False)
+    # first_name = forms.CharField(widget=forms.TextInput(attrs={
+    #     'class':'form-input',
+    #     'id':'name',
+    #     'name':'name',
+    #     'type':'text',
+    #     'value': '',
+    # }), required=False)
+    # last_name = forms.CharField(widget=forms.TextInput(attrs={
+    #     'class':'form-input',
+    #     'id':'name',
+    #     'name':'name',
+    #     'type':'text',
+    #     'value': '',
+    # }), required=False)
+    # old_password = forms.CharField(widget=forms.TextInput(attrs={
+    #     'class': 'form-input',
+    #     'id': 'old_password',
+    #     'name':  'old_password',
+    #     'type': 'password',
+    #     'placeholder': 'Тут можно изменить пароль',
+    # }), required=False)
+    # new_password1 = forms.CharField(widget=forms.TextInput(attrs={
+    #     'class': 'form-input',
+    #     'id': 'new_password1',
+    #     'name':  'new_password1',
+    #     'type': 'password',
+    #     'placeholder': 'Новый пароль',
+    # }), required=False)
+    # new_password2 = forms.CharField(widget=forms.TextInput(attrs={
+    #     'class': 'form-input',
+    #     'id': 'new_password2',
+    #     'name':  'new_password2',
+    #     'type': 'password',
+    #     'placeholder': 'Подтвердите новый пароль',
+    # }), required=False)
         
-    def change_first_last_name(self, request):
+    def clean_old_password(self):
+        old_password = self.data.get('old_password')
+        if old_password == '': return ''
+        return super().clean_old_password()
+    
+    def clean_new_password1(self):
+        if self.data.get('new_password1') == '': return ''
+        return super().clean()
+
+    def clean_new_password2(self):
+        if self.data.get('new_password2') == '': return ''
+        return super().clean_new_password2()
+    
+    def save(self, request, commit=True):
         user = request.user
-        first_name, last_name = self.cleaned_data.get('first_last_name').split() if self.cleaned_data.get('first_last_name') else (None, None)
-        if first_name and last_name:
-                user.first_name = first_name
-                user.last_name = last_name
-                return user.save()
-        return None
-    
-    def change_password(self, request):
-        print(self.cleaned_data)
-        password, password_1 = self.cleaned_data.get('new_password'), self.cleaned_data.get('repeat_new_password')
-        if (password == password_1) and (password and password_1) is not None:
-            user = request.user
-            user.set_password(password)
-            return user.save()
-        return None
-                
-    def save(self, request, *args, **kwargs):
-        self.change_first_last_name(request)
-        self.change_password(request)
-        return None
-    
-    def clean_password(self):
-        password, password_1 = self.cleaned_data.get('new_password'), self.cleaned_data.get('repeat_new_password')
-        if (password == password_1) and (password and password_1) is not None:
-            return password
-        raise ValidationError('Input password and repeat password fields')
-        
-    def clean_first_last_name(self):
-        first_last_name = self.cleaned_data.get('first_last_name')
-        try:
-            first_name, last_name = first_last_name.split() if first_last_name else (None, None)
-        except ValueError:
-            raise ValidationError('Input first name and last name')
-        return first_last_name
+        user.email, user.first_name, user.user_last_name = (self.cleaned_data.get(key) for key in ('email', 'first_name', 'last_name'))
+        old_password, new_password1, new_password2 = (self.data.get(key) for key in ('old_password', 'new_password1', 'new_password2'))
+        user.save()
+        if old_password == '' and new_password1 == '' and new_password2 == '': return None
+        return super().save(commit)
     
     class Meta:
         model = User
-        fields = ('email', )
-        widgets = {
-            'email': forms.TextInput(attrs={
-                'class': 'form-input',
-                'id': 'mail',
-                'name': 'mail',
-                'type': 'text',
-                }),
-        }
+        fields = ('email', 'first_name', 'last_name')

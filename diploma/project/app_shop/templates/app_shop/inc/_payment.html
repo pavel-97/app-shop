@@ -1,0 +1,25 @@
+<div class="Section">
+  <div class="wrap">
+    <form class="form Payment" action="{% url 'pay' order_pk=order.pk %}" method="post">
+      {% csrf_token %}
+      <div class="Payment-card">
+        <div class="form-group">
+          <label class="form-label">Номер карты
+          </label>
+          <input class="form-input Payment-bill" id="numero1" data-mask="9999 9999" data-validate="require pay" name="card" type="text" placeholder="9999 9999">
+        </div>
+      </div>
+      <div class="Payment-pay">
+
+        {% if order.pay == 'SOMEONE' %}
+        <div class="form-group">
+          <a class="btn btn_success Payment-generate" href="#">Сгенирировать случайный счет</a>
+        </div>
+        {% endif %}
+        {% comment %} <a class="btn btn_primary" href="{% url 'pay' order_pk=order.pk %}">Оплатить</a> {% endcomment %}
+        <button class="btn btn_primary">Оплатить</button>
+      </div>
+    </form>
+  </div>
+</div>
+

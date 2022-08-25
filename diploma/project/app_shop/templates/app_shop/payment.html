@@ -1,0 +1,11 @@
+{% extends 'app_shop/app_shop_base.html' %}
+
+{% block main %}
+
+  {% with  title='Оплата' span='Оплата' %}
+		{% include 'inc/header/_middle.html' %}
+	{% endwith %}
+
+  {% include 'app_shop/inc/_payment.html' %}
+
+{% endblock  %}
