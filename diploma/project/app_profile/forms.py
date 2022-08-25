@@ -78,7 +78,7 @@ class ChangeUserForm(PasswordChangeForm, forms.ModelForm):
     
     def clean_new_password1(self):
         if self.data.get('new_password1') == '': return ''
-        return super().clean()
+        return self.data.get('new_password1')
 
     def clean_new_password2(self):
         if self.data.get('new_password2') == '': return ''
