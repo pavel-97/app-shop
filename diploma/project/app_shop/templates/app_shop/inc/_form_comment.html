@@ -1,18 +1,15 @@
 <div class="Tabs-addComment">
-
 	<form class="form" action="#" method="post">
 		{% csrf_token %}
-		
+
 		{% for field in form %}
 		<div class="form-group">
 			{{field}}
 		</div>
 		{% endfor %}
-		
+
 		<div class="form-group">
 			<button class="btn btn_muted" type="submit">Submit Review</button>
 		</div>
-		
 	</form>
-
 </div>

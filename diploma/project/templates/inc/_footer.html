@@ -3,24 +3,16 @@
 <footer class="Footer">
   <div class="wrap">
     <div class="row Footer-main">
-  
+
       <div class="row-block">
-        
+
         {% with  html_class_logo='Footer-logo' img_name='logo_footer' %}
           {% include 'inc/_logo.html' %}
         {% endwith %}
-        
-        <p>
-          Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincid  unt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad
-        </p>
 
-        {% include 'inc/_socials.html' %}  
-      
+        {% include 'inc/_socials.html' %}
+
       </div>
-
-      {% block useful_links %}
-        {% include 'inc/footer/_useful_links.html' %}
-      {% endblock %}
 
       {% block my_account %}
         {% include 'inc/footer/_my_account.html' %}
@@ -43,13 +35,13 @@
 
         <div class="row-block">
           <span>Accepted Payments</span>
-          
+
           {% block footer_payments %}
             {% include 'inc/footer/_footer_payments.html' %}
           {% endblock %}
 
         </div>
-        
+
       </div>
     </div>
   </div>

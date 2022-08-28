@@ -33,7 +33,7 @@ class ProductListOrderByMixin:
             )
     
     def get_queryset(self):
-        queryset = super().get_queryset().prefetch_related('tag').prefetch_related('images').annotate(Count('productcomment'))
+        queryset = super().get_queryset().prefetch_related('images').annotate(Count('productcomment'))
         field = cache.get_or_set(tools.format_name_class('field', self), self.field)
         field_reverse = cache.get_or_set(tools.format_name_class('field_reverse', self), self.field_reverse)
         

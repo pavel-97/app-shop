@@ -33,11 +33,6 @@ class ProductAdmin(admin.ModelAdmin):
         return super().get_queryset(request).prefetch_related('images')
 
 
-@admin.register(models.Tag)
-class TagAdmin(admin.ModelAdmin):
-    pass
-
-
 @admin.register(models.ProductImage)
 class ProductImageAdmin(admin.ModelAdmin):
     list_display = ('product', 'get_photo')

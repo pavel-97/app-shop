@@ -3,8 +3,8 @@
 {% load mptt_tags %}
 
 <div class="Header-categories">
-	
-		
+
+
 	<div class="CategoriesButton">
 
 		<div class="CategoriesButton-title">
@@ -14,7 +14,7 @@
 			</div>
 			<span class="CategoriesButton-text">All Departments</span>
 			<div class="CategoriesButton-arrow"></div>
-			
+
 
 		</div>
 
@@ -23,14 +23,14 @@
 			{% recursetree categories %}
 
 			<div class="CategoriesButton-link">
-				
+
 				<a href="{% url 'category' slug=node.slug %}">
 					<div class="CategoriesButton-icon">
-						<img src="{% static 'assets/img/icons/departments/10.svg' %}" alt="10.svg">
+						<img src="{{node.image.url}}" alt="10.svg ">
 					</div>
 					<span class="CategoriesButton-text">{{ node.title }}</span>
 				</a>
-				
+
 				{% if not node.is_leaf_node %}
 					<a class="CategoriesButton-arrow" href="#"></a>
 					<div class="CategoriesButton-submenu">
@@ -39,7 +39,7 @@
 					{% endif %}
 
 			</div>
-			
+
 			{% endrecursetree %}
 
 		</div>

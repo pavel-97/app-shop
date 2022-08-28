@@ -4,6 +4,7 @@
 		<h3 class="Section-title">{{comments|length}} Reviews</h3>
 	</header>
 
+  {% if request.user.is_authenticated %}
 	{% for comment in comments %}
 	<div class="Comments">
 		<div class="Comment">
@@ -34,5 +35,9 @@
 	{% block form_comment %}
 		{% include 'app_shop/inc/_form_comment.html' %}
 	{% endblock  %}
+
+  {% else %}
+    <a href="{% url 'login' %}">Войти, чтобы добавить(прочитать) отзывы.</a>
+  {% endif %}
 
 </div>

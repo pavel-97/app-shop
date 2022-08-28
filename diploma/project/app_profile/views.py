@@ -20,6 +20,7 @@ class AccountView(LoginRequiredMixin, BasketContextMixin, CategoryContextMixin, 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
         context['profile'] = models.Profile.objects.get(user=self.request.user)
+        context['last_order'] = self.request.user.profile.order_set.latest('created_at')
         return context
     
     
