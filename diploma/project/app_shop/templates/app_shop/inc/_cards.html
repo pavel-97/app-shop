@@ -7,7 +7,7 @@
     {% for product in products %}
 
     <div class="Card">
-      
+
       <a class="Card-picture" href="{{product.get_absolute_url}}">
         <img src="{{product|content_image}}" alt="card.jpg"/>
       </a>
@@ -17,16 +17,12 @@
         <strong class="Card-title">
           <a href="product.html">{{product.title}}</a>
         </strong>
-        
+
         <div class="Card-description">
           <div class="Card-cost">
             <span class="Card-price">${{product.price}}</span>
           </div>
-          <div class="Card-category">
-              {% for tag in product.tag.all %}
-               {{tag}}
-              {% endfor %}
-          </div>
+
           <div class="Card-hover">
             <a class="Card-btn" href="{% url 'add_product_in_basket' slug=product.slug %}">
               <img src="{% static 'assets/img/icons/card/cart.svg' %}" alt="cart.svg"/>
@@ -35,7 +31,7 @@
         </div>
 
       </div>
-    
+
     </div>
 
     {% endfor %}

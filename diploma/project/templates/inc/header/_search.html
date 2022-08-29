@@ -2,7 +2,7 @@
 
 <div class="Header-search">
 	<div class="search">
-		<form class="form form_search" method="get">
+		<form class="form form_search" action="{% url 'products' %}" method="get">
 			<input class="search-input" id="query" name="query" type="text" placeholder="What are you looking for ..."/>
 			<button class="search-button" type="submit" id="search">
 				<img src="{% static 'assets/img/icons/search.svg' %}" alt="search.svg"/>

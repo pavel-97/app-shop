@@ -1,8 +1,6 @@
-from http import server
-from urllib import request
 from django.shortcuts import render
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeView
+from django.contrib.auth.views import LoginView, LogoutView
 from django.urls import reverse_lazy
 from django.views.generic import UpdateView
 from django.core.cache import cache
@@ -22,34 +20,10 @@ class AccountView(LoginRequiredMixin, BasketContextMixin, CategoryContextMixin, 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
         context['profile'] = models.Profile.objects.get(user=self.request.user)
+        context['last_order'] = self.request.user.profile.order_set.latest('created_at')
         return context
     
     
-# class ProfileView(LoginRequiredMixin, BasketContextMixin, CategoryContextMixin, UpdateView, View):
-#     model = models.Profile
-#     form_class = forms.ChangeProfileForm
-#     form_user = forms.ChangeUserForm
-#     template_name = 'app_profile/profile.html'
-    
-#     def get_context_data(self, *args, **kwargs):
-#         context = super().get_context_data(*args, **kwargs)
-#         context['form_user'] = self.form_user(instance=self.request.user)
-#         return context
-    
-#     def get_object(self):
-#         return self.model.objects.get(user=self.request.user)
-    
-#     def get_success_url(self):
-#         return reverse_lazy('account')
-    
-#     def post(self, request, *args, **kwargs):
-#         self.object = self.get_object()
-#         form_user = self.form_user(request.POST)
-#         if form_user.is_valid():
-#             form_user.save(request)
-#             return super().post(request, *args, **kwargs)
-#         return render(request, self.template_name, self.get_context_data() | {'form_user': form_user})
-
 class ProfileView(LoginRequiredMixin, BasketContextMixin, CategoryContextMixin, UpdateView):
     template_name = 'app_profile/profile.html'
     form_class = forms.ChangeProfileForm
@@ -80,10 +54,6 @@ class ProfileView(LoginRequiredMixin, BasketContextMixin, CategoryContextMixin, 
         return render(request, self.template_name, self.get_context_data()|{'form_user': form_user, })
     
     
-    
-    
-        
-        
 class HistoryOrderView(LoginRequiredMixin, BasketContextMixin, CategoryContextMixin, View):
     template_name = 'app_profile/history_order.html'
     model = models.HistoryOrder

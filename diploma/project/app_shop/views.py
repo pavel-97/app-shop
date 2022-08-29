@@ -14,13 +14,17 @@ from . import forms
 
 class HomeView(utility.CategoryContextMixin, utility.BasketContextMixin, ListView):
     template_name = 'app_shop/index.html'
-    queryset = models.Product.objects.all().select_related('category').prefetch_related('tag').prefetch_related('images')
+    queryset = models.Product.objects.all().select_related('category').prefetch_related('images')
     context_object_name = 'products'
     
     def get_queryset(self):
         queryset = super().get_queryset().filter(title__icontains=self.request.GET.get('query', ''))
         return queryset
     
+    def get_context_data(self, **kwargs):
+        
+        context = super().get_context_data(**kwargs)
+        return context
 
 class ProductListView(
     utility.CategoryContextMixin,

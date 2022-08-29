@@ -62,7 +62,16 @@ def get_path(instance, filename):
         instance.title,
         format_img
     )
-    
+
+
+def get_path_category(instance, filename):
+    format_img = filename.split('.')[-1]
+    return 'app_shop/{}/{}.{}'.format(
+        'categories',
+        instance.title,
+        format_img
+    )
+
     
 def add_product_to_basket(product, count=1):
     basket = cache.get('basket', dict())

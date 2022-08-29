@@ -1,10 +1,8 @@
-import email
 from django import forms
-from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, PasswordChangeForm, UserChangeForm
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, PasswordChangeForm
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
 from django.shortcuts import redirect
-from django.core.exceptions import ValidationError
 
 from . import models
 
@@ -61,58 +59,17 @@ class ChangeUserForm(PasswordChangeForm, forms.ModelForm):
             'id': id_field,
             'name': name_field,
             'type': type_field,
+            'placeholder': placeholder_field,
             'value': value_field,
-        }), required=False) for class_field, id_field, name_field, type_field, value_field in (
-            ('form-input', 'mail', 'mail', 'text', ''),
-            ('form-input', 'name', 'name', 'text', ''),
-            ('form-input', 'name', 'name', 'text', ''),
-            ('form-input', 'old_password', 'old_password', 'password', ''),
-            ('form-input', 'new_password1', 'new_password1', 'password', ''),
-            ('form-input', 'new_password2', 'new_password2', 'password', '')
+        }), required=False) for class_field, id_field, name_field, type_field, placeholder_field, value_field, in (
+            ('form-input', 'mail', 'mail', 'text', '', ''),
+            ('form-input', 'name', 'name', 'text', '', ''),
+            ('form-input', 'name', 'name', 'text', '', ''),
+            ('form-input', 'old_password', 'old_password', 'password', 'Введите старый пароль', ''),
+            ('form-input', 'new_password1', 'new_password1', 'password', 'Тут можно изменить пароль', ''),
+            ('form-input', 'new_password2', 'new_password2', 'password', 'Введите пароль повторно', '')
         )
     )
-    
-    # email = forms.CharField(widget=forms.TextInput(attrs={
-    #             'class': 'form-input',
-    #             'id': 'mail',
-    #             'name': 'mail',
-    #             'type': 'text',
-    #             }), required=False)
-    # first_name = forms.CharField(widget=forms.TextInput(attrs={
-    #     'class':'form-input',
-    #     'id':'name',
-    #     'name':'name',
-    #     'type':'text',
-    #     'value': '',
-    # }), required=False)
-    # last_name = forms.CharField(widget=forms.TextInput(attrs={
-    #     'class':'form-input',
-    #     'id':'name',
-    #     'name':'name',
-    #     'type':'text',
-    #     'value': '',
-    # }), required=False)
-    # old_password = forms.CharField(widget=forms.TextInput(attrs={
-    #     'class': 'form-input',
-    #     'id': 'old_password',
-    #     'name':  'old_password',
-    #     'type': 'password',
-    #     'placeholder': 'Тут можно изменить пароль',
-    # }), required=False)
-    # new_password1 = forms.CharField(widget=forms.TextInput(attrs={
-    #     'class': 'form-input',
-    #     'id': 'new_password1',
-    #     'name':  'new_password1',
-    #     'type': 'password',
-    #     'placeholder': 'Новый пароль',
-    # }), required=False)
-    # new_password2 = forms.CharField(widget=forms.TextInput(attrs={
-    #     'class': 'form-input',
-    #     'id': 'new_password2',
-    #     'name':  'new_password2',
-    #     'type': 'password',
-    #     'placeholder': 'Подтвердите новый пароль',
-    # }), required=False)
         
     def clean_old_password(self):
         old_password = self.data.get('old_password')
@@ -121,7 +78,7 @@ class ChangeUserForm(PasswordChangeForm, forms.ModelForm):
     
     def clean_new_password1(self):
         if self.data.get('new_password1') == '': return ''
-        return super().clean()
+        return self.data.get('new_password1')
 
     def clean_new_password2(self):
         if self.data.get('new_password2') == '': return ''
