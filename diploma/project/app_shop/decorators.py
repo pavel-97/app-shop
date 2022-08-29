@@ -6,6 +6,8 @@ from django.core.exceptions import ValidationError
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 
+from . import models
+
 
 def except_value_error(func):
     def wrapper(*args, **kwargs):
@@ -85,9 +87,11 @@ def include_delivery(func):
     def wrapper(*args, **kwargs):
         result = func(*args, **kwargs)
         if all([product_order.product.free_delivery for product_order in result.product_order.all()]):
-            delivery = {'ORDINARY': 0, 'EXPRESS': 500}
+            delivery = {'ORDINARY': models.OrderPriceForDelivery.objects.get(title='ordinary price'), 
+                        'EXPRESS': models.OrderPriceForDelivery.objects.get(title='express price')}
         else:    
-            delivery = {'ORDINARY': 200 if result.total_price < 2000 else 0, 'EXPRESS': 500}
+            delivery = {'ORDINARY': models.OrderPriceForDelivery.objects.get(title='ordinary price') if result.total_price < 2000 else 0, 
+                        'EXPRESS': models.OrderPriceForDelivery.objects.get(title='ordinary price')}
         result.total_price = F('total_price') + delivery.get(result.delivery)
         return result
     return wrapper

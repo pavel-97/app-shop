@@ -38,3 +38,8 @@
     
 4. Запустите проект:
         pipenv run python manage.py runserver
+
+
+##3. Схема базы данных приложения.
+
+![schema_db](schema_db.png)

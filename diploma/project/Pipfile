@@ -9,9 +9,11 @@ transliterate = "*"
 pillow = "*"
 django-mptt = "*"
 docutils = "*"
+sentry-sdk = "*"
 
 [dev-packages]
 django-debug-toolbar = "*"
+django-schema-graph = "*"
 
 [requires]
 python_version = "3.9"

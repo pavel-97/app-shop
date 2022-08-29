@@ -64,6 +64,11 @@ class ProductImage(utility.StrMixin, models.Model):
         return super().save(*args, **kwargs)
     
     
+class OrderPriceForDelivery(utility.StrMixin, models.Model):
+    title = models.CharField(max_length=50, blank=True, unique=True, verbose_name=_('title'))
+    price = models.DecimalField(max_digits=7, decimal_places=2, default=0, verbose_name=_('price'))
+    
+    
 class ProductComment(models.Model):
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE, verbose_name=_('profile'))
     product = models.ForeignKey(Product, blank=True, null=True, on_delete=models.CASCADE, verbose_name=_('product'))

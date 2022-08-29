@@ -92,3 +92,7 @@ class ProductOrderAdmin(admin.ModelAdmin):
     def get_queryset(self, request):
         return super().get_queryset(request).prefetch_related('order_set')
     
+    
+@admin.register(models.OrderPriceForDelivery)
+class OrderPriceForDeliveryAdmin(admin.ModelAdmin):
+    pass
