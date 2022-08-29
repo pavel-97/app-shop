@@ -23,7 +23,6 @@ from schema_graph.views import Schema
 
 urlpatterns = [
     path('schema/', Schema.as_view()),
-    path('admin/doc/', include('django.contrib.admindocs.urls')),
     path('admin/', admin.site.urls),
     path('profile/', include('app_profile.urls')),
     path('', include('app_shop.urls')),

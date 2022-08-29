@@ -37,107 +37,36 @@ class ProductListView(
     model = models.Product
     
     
-class ProductListOrderByDateListView(
-    utility.CategoryContextMixin,
-    utility.BasketContextMixin,
-    utility.ProductQuerysetFilterMixin,
-    utility.SearchMixin,
-    utility.ProductListOrderByMixin,
-    ListView
-    ):
-    model = models.Product
+class ProductListOrderByDateListView(ProductListView):
     field = '-updated_at'
 
 
-class ProductListOrderByPriceListView(
-    utility.CategoryContextMixin,
-    utility.BasketContextMixin,
-    utility.ProductQuerysetFilterMixin,
-    utility.SearchMixin,
-    utility.ProductListOrderByMixin,
-    ListView
-    ):
-    model = models.Product
+class ProductListOrderByPriceListView(ProductListView):
     field = '-price'
 
 
-class ProductListOrderByViewsListView(
-    utility.CategoryContextMixin,
-    utility.BasketContextMixin,
-    utility.ProductQuerysetFilterMixin,
-    utility.SearchMixin,
-    utility.ProductListOrderByMixin,
-    ListView
-    ):
-    model = models.Product
+class ProductListOrderByViewsListView(ProductListView):
     field = '-views'
     
     
-class ProductListOrderByCommentListView(
-    utility.CategoryContextMixin,
-    utility.BasketContextMixin,
-    utility.ProductQuerysetFilterMixin,
-    utility.SearchMixin,
-    utility.ProductListOrderByMixin,
-    ListView
-    ):
-    model = models.Product
+class ProductListOrderByCommentListView(ProductListView):
     field = '-productcomment__count'
     
     
-class CategoryView(
-    utility.CategoryMixin,
-    utility.CategoryContextMixin,
-    utility.ProductQuerysetFilterMixin,
-    utility.BasketContextMixin,
-    utility.SearchMixin,
-    utility.ProductListOrderByMixin,
-    ListView,
-    ):
-    model = models.Product
+class CategoryView(utility.CategoryMixin, ProductListView):
     template_name = 'app_shop/category.html'
     field = '-views'
     
 
-class CategoryOrderByPriceView(
-    utility.CategoryMixin,
-    utility.CategoryContextMixin,
-    utility.BasketContextMixin,
-    utility.ProductQuerysetFilterMixin,
-    utility.SearchMixin,
-    utility.ProductListOrderByMixin,
-    ListView
-    ):
-    model = models.Product
-    template_name = 'app_shop/category.html'
+class CategoryOrderByPriceView(CategoryView):
     field = '-price'
     
     
-class CategoryOrderByDateView(
-    utility.CategoryMixin,
-    utility.CategoryContextMixin,
-    utility.BasketContextMixin,
-    utility.ProductQuerysetFilterMixin,
-    utility.SearchMixin,
-    utility.ProductListOrderByMixin,
-    ListView
-    ):
-    model = models.Product
-    template_name = 'app_shop/category.html'
+class CategoryOrderByDateView(CategoryView):
     field = '-updated_at'
     
     
-class CategoryOrderByCommentView(
-    utility.CategoryMixin,
-    utility.CategoryContextMixin,
-    utility.BasketContextMixin,
-    utility.ProductQuerysetFilterMixin,
-    utility.SearchMixin,
-    utility.ProductListOrderByMixin,
-    ListView
-    ):
-    model = models.Product
-    template_name = 'app_shop/category.html'
+class CategoryOrderByCommentView(CategoryView):
     field = '-productcomment__count'
 
 
