@@ -13,6 +13,10 @@ from . import forms
 
 
 class HomeView(utility.CategoryContextMixin, utility.BasketContextMixin, ListView):
+    """
+    Класс HomeView. Наследник классов CategoryContextMixin, BasketContextMixin, ListView.
+    Реализует индексную страницу страницу.
+    """
     template_name = 'app_shop/index.html'
     queryset = models.Product.objects.all().select_related('category').prefetch_related('images')
     context_object_name = 'products'
@@ -34,43 +38,83 @@ class ProductListView(
     utility.ProductListOrderByMixin,
     ListView
     ):
+    """
+    Класс ProductListView. Наследник классов CategoryContextMixin, BasketContextMixin, ProductQuerysetFilterMixin, SearchMixin, ProductListOrderByMixin, ListView.
+    Реализует реализует страницу с товароми.
+    """
     model = models.Product
     
     
 class ProductListOrderByDateListView(ProductListView):
+    """
+    Класс ProductListOrderByDateListView. Наследник класса ProductListView.
+    Реализует реализует страницу с товароми отсортированным по полю updated_at.
+    """
     field = '-updated_at'
 
 
 class ProductListOrderByPriceListView(ProductListView):
+    """
+    Класс ProductListOrderByPriceListView. Наследник класса ProductListView.
+    Реализует реализует страницу с товароми отсортированным по полю price.
+    """
     field = '-price'
 
 
 class ProductListOrderByViewsListView(ProductListView):
+    """
+    Класс ProductListOrderByViewsListView. Наследник класса ProductListView.
+    Реализует реализует страницу с товароми отсортированным по полю views.
+    """
     field = '-views'
     
     
 class ProductListOrderByCommentListView(ProductListView):
+    """
+    Класс ProductListOrderByCommentListView. Наследник класса ProductListView.
+    Реализует реализует страницу с товароми отсортированным по полю productcomment__count.
+    """
     field = '-productcomment__count'
     
     
 class CategoryView(utility.CategoryMixin, ProductListView):
+    """
+    Класс CategoryView. Наследник класса CategoryMixin, ProductListView.
+    Реализует реализует страницу с товароми определенной категории, отсортированным по полю views.
+    """
     template_name = 'app_shop/category.html'
     field = '-views'
     
 
 class CategoryOrderByPriceView(CategoryView):
+    """
+    Класс CategoryOrderByPriceView. Наследник класса CategoryView.
+    Реализует реализует страницу с товароми определенной категории, отсортированным по полю price.
+    """
     field = '-price'
     
     
 class CategoryOrderByDateView(CategoryView):
+    """
+    Класс CategoryOrderByDateView. Наследник класса CategoryView.
+    Реализует реализует страницу с товароми определенной категории, отсортированным по полю updated_at.
+    """
     field = '-updated_at'
     
     
 class CategoryOrderByCommentView(CategoryView):
+    """
+    Класс CategoryOrderByCommentView. Наследник класса CategoryView.
+    Реализует реализует страницу с товароми определенной категории, отсортированным по полю productcomment__count.
+    """
     field = '-productcomment__count'
 
 
 class ProductDetailView(utility.CategoryContextMixin, utility.BasketContextMixin, DetailView):
+    """
+    Класс ProductDetailView. Наследник класса CategoryContextMixin, BasketContextMixin, DetailView.
+    Реализует реализует страницу с определенным товаром.
+    """
     model = models.Product
     form = forms.CommentForm
     context_object_name = 'product'
@@ -103,10 +147,18 @@ class ProductDetailView(utility.CategoryContextMixin, utility.BasketContextMixin
         return render(request, 'app_shop/product_detail.html', context)
     
 class BasketView(utility.CategoryContextMixin, utility.BasketContextMixin, utility.View):
+    """
+    Класс BasketView. Наследник класса CategoryContextMixin, BasketContextMixin, View.
+    Реализует реализует страницу корзины.
+    """
     template_name = 'app_shop/basket.html'
         
     
 class AddProductInBasketView(utility.View):
+    """
+    Класс AddProductInBasketView. Наследник класса View.
+    Реализует добавление товара в корзину и перенаправляет на страницу, где был пользователь.
+    """
     def get(self, request, slug):
         product = models.Product.objects.prefetch_related('images').get(slug=slug)
         tools.add_product_to_basket(product)
@@ -114,6 +166,10 @@ class AddProductInBasketView(utility.View):
     
     
 class DeleteProductFromBasket(utility.View):
+    """
+    Класс DeleteProductFromBasket. Наследник класса View.
+    Реализует удаление товара из корзины.
+    """
     def get(self, request, slug):
         product = models.Product.objects.get(slug=slug)
         tools.delete_product_from_basket(product)
@@ -121,6 +177,10 @@ class DeleteProductFromBasket(utility.View):
     
     
 class MakeOrder(LoginRequiredMixin, utility.CategoryContextMixin, utility.BasketContextMixin, utility.View):
+    """
+    Класс MakeOrder. Наследник класса LoginRequiredMixin, CategoryContextMixin, BasketContextMixin, View.
+    Реализует страницу оформление заказа.
+    """
     template_name = 'app_shop/order.html'
     form = forms.MakeOrderForm
     
@@ -143,6 +203,10 @@ class MakeOrder(LoginRequiredMixin, utility.CategoryContextMixin, utility.Basket
     
     
 class PayOrder(LoginRequiredMixin, utility.CategoryContextMixin, utility.BasketContextMixin, utility.View):
+    """
+    Класс PayOrder. Наследник класса LoginRequiredMixin, CategoryContextMixin, BasketContextMixin, View.
+    Реализует оплату заказа и отображает страницу с ожиданием оплаты.
+    """
     template_name = 'app_shop/progress_payment.html'
     
     def post(self, request, order_pk):

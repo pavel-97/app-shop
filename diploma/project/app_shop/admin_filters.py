@@ -4,6 +4,9 @@ from . import models
 
 
 class FilterOrder(admin.SimpleListFilter):
+    """
+    Класс реализует фильтрацию заказанных продуктов по заказщику в администротивной панели.
+    """
     title = 'orders'
     parameter_name = 'order'
     

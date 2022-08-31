@@ -1,4 +1,5 @@
 from types import FunctionType
+from typing import Callable, Optional, Union, Dict
 
 from django.core.cache import cache
 from django.db.models import F
@@ -9,7 +10,13 @@ from django.urls import reverse_lazy
 from . import models
 
 
-def except_value_error(func):
+def except_value_error(func: Callable) -> Callable:
+    """
+    Функция является декоратором.
+    Принимает функцию. Ловит исключение ValueError, если оно возникает в принимаемой функции.
+    : type func: Callable
+    : rtype: Callable
+    """
     def wrapper(*args, **kwargs):
         try:
             result = func(*args, **kwargs)
@@ -19,7 +26,13 @@ def except_value_error(func):
     return wrapper
 
 
-def except_validation_error(func):
+def except_validation_error(func: Callable) -> Callable:
+    """
+    Функция является декоратором.
+    Принимает функцию. Ловит исключение ValidationError, если оно возникает в принимаемой функции.
+    : type func: Callable
+    : rtype: Callable
+    """
     def wrapper(*args, **kwargs):
         try:
             result = func(*args, **kwargs)
@@ -29,8 +42,16 @@ def except_validation_error(func):
     return wrapper
 
 
-def except_error_with_arg(_func=None, *, return_object=dict(), **_kwargs):
-    def except_attr_error(func):
+def except_error_with_arg(_func:Optional[Callable]=None, *, return_object:Union[Dict, Callable]=dict(), **_kwargs) -> Callable:
+    """
+    Функция является декоратором.
+    Принимает функцию и аргумен с объектом, который вернет обертываемая функция.
+    Ловит исключения AttributeError, TypeError, если оно возникает в принимаемой функции.
+    : type _func: Callable или None
+    : type return_object: Dict или Callable
+    : rtype: Callable
+    """
+    def except_attr_error(func: Callable) -> Callable:
         def wrapper(*args, **kwargs):
             try:
                 result = func(*args, **kwargs)
@@ -43,7 +64,12 @@ def except_error_with_arg(_func=None, *, return_object=dict(), **_kwargs):
     return except_attr_error(_func)
 
 
-def add_view(func):
+def add_view(func: Callable) -> Callable:
+    """
+    Функция является декоратором. Принимает функцию. Меняет поле таблицы.
+    : type func: Callable
+    : rtype: Callable
+    """
     def wrapper(*args, **kwargs):
         model = args[0].model
         instance = model.objects.filter(slug=kwargs.get('slug'))
@@ -53,7 +79,12 @@ def add_view(func):
     return wrapper
 
 
-def delete_basket(func):
+def delete_basket(func: Callable) -> Callable:
+    """
+    Функция является декоратором. Принимает функцию. Удаляет данные из корзины.
+    : type func: Callable
+    : rtype: Callable
+    """
     def wrapper(*args, **kwargs):
         result = func(*args, **kwargs)
         cache.delete('basket')
@@ -61,7 +92,12 @@ def delete_basket(func):
     return wrapper
 
 
-def add_review(func):
+def add_review(func: Callable) -> Callable:
+    """
+    Функция является декоратором. Принимает функцию. Добавляет в кэш просмотренные товары.
+    : type func: Callable
+    : rtype: Callable
+    """
     def wrapper(*args, **kwargs):
         result = func(*args, **kwargs)
         product = args[0].get_context_data().get('product')
@@ -72,7 +108,12 @@ def add_review(func):
         return result
     return wrapper
 
-def permission_denied(func):
+def permission_denied(func: Callable) -> Callable:
+    """
+    Функция является декоратором. Ограничивает достпут для не авторизированного пользователя.
+    : type func: Callable
+    : rtype: Callable
+    """
     def wrapper(*args, **kwargs):
         request = args[1]
         if request.user.pk:
@@ -83,7 +124,12 @@ def permission_denied(func):
     return wrapper
 
 
-def include_delivery(func):
+def include_delivery(func: Callable) -> Callable:
+    """
+    Функция является декоратором. Принимает функцию. Добавлят стоимость доставки к заказу.
+    : type func: Callable
+    : rtype: Callable
+    """
     def wrapper(*args, **kwargs):
         result = func(*args, **kwargs)
         if all([product_order.product.free_delivery for product_order in result.product_order.all()]):

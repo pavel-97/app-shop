@@ -9,11 +9,18 @@ from . import models
 
 
 class StrMixin:
+    """
+    Класс StrMixin. Является примесью. Наследники получают метод __str__.
+    """
     def __str__(self):
         return self.title
     
     
 class ProductListOrderByMixin:
+    """
+    Класс ProductListOrderByMixin. Является примесью для классов предстовления ListView.
+    Наследники получают возможность сортировать по указанному полю свои элементы.
+    """
     paginate_by = 8
     context_object_name = 'products'
     field = ''
@@ -49,7 +56,10 @@ class ProductListOrderByMixin:
     
 
 class ProductQuerysetFilterMixin:
-    
+    """
+    Класс ProductQuerysetFilterMixin. Является примесью для классов предстовления ListView.
+    Наследники получают возможность фитьтровать свои элементы.
+    """
     @decorators.except_error_with_arg(return_object=dict())
     def get_filters(self):
         price_range, title_filter, is_exist, free_delivery = (self.request.GET.get(_) for _ in ('price', 'title', 'is_exist', 'free_delivery'))
@@ -73,6 +83,10 @@ class ProductQuerysetFilterMixin:
     
     
 class SearchMixin:
+    """
+    Класс SearchMixin. Является примесью для классов предстовления ListView.
+    Наследники получают возможность фильтровать свой queryset по поисковому запросу.
+    """
     def get_queryset(self):
         query = tools.set_filter(
             self,
@@ -84,6 +98,10 @@ class SearchMixin:
     
     
 class BasketContextMixin:
+    """
+    Класс BasketContextMixin. Является примесью для классов предстовления.
+    Наследники получают возможность отображать корзину в шаблонах.
+    """
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['basket'] = cache.get('basket', dict())
@@ -91,6 +109,10 @@ class BasketContextMixin:
     
 
 class CategoryContextMixin:
+    """
+    Класс CategoryContextMixin. Является примесью для классов предстовления.
+    Наследники получают возможность отображать категории в шаблонах.
+    """
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['categories'] = models.CategoryMPTT.objects.annotate(Min('product__price')).annotate(Max('product__views'))
@@ -98,6 +120,10 @@ class CategoryContextMixin:
     
     
 class View(View):
+    """
+    Класс View. Наследник View из django.views. 
+    Определены методы get и get_context_data.
+    """
     template_name = None
     
     def get_context_data(self, *args, **kwargs):
@@ -108,6 +134,10 @@ class View(View):
     
         
 class CategoryMixin:
+    """
+    Класс CategoryMixin. Является примесью для классов предстовления.
+    Наследники получают возможность отображать категории в шаблонах (не путать с вышеуказанным классом CategoryContextMixin).
+    """
     def get_queryset(self):
         category = models.CategoryMPTT.objects.get(slug=self.kwargs.get('slug'))
         childrens = category.get_leafnodes()

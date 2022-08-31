@@ -9,6 +9,10 @@ from . import models
 
 @admin.register(models.Profile)
 class ProfileAdmin(admin.ModelAdmin):
+    """
+    Класс ProfileAdmin. Наследние класса ModelAdmin.
+    Отображает ссылку на таблицу модели Profile в административной панели.
+    """
     list_display = ('user', 'get_photo')
     
     def get_photo(self, obj):
@@ -24,6 +28,10 @@ class ProfileAdmin(admin.ModelAdmin):
 
 @admin.register(models.HistoryOrder)
 class HistoryOrderAdmin(admin.ModelAdmin):
+    """
+    Класс HistoryOrderAdmin. Наследние класса ModelAdmin.
+    Отображает ссылку на таблицу модели HistoryOrder в административной панели.
+    """
     list_display = ('profile', 'orders_count')
     
     def orders_count(self, obj):

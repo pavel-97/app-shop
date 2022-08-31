@@ -8,6 +8,10 @@ from . import models
 
 
 class LoginForm(AuthenticationForm):
+    """
+    Класс LoginForm. Наследник класса AuthenticationForm.
+    Реализует форму авторизации пользователя.
+    """
     def __init__(self, request, *args, **kwargs):
         super().__init__(request, *args, **kwargs)
         self.fields['username'].widget.attrs.update({'class': 'form-input'})
@@ -15,7 +19,10 @@ class LoginForm(AuthenticationForm):
         
 
 class ProfileRegistrationForm(UserCreationForm):
-    
+    """
+    Класс ProfileRegistrationForm. Наследник класса UserCreationForm.
+    Реализует форму регистрации пользователя.
+    """
     def save(self, request, *args, **kwargs):
         user = super().save(*args, **kwargs)
         models.Profile.objects.create(user=user)
@@ -33,6 +40,10 @@ class ProfileRegistrationForm(UserCreationForm):
         
         
 class ChangeProfileForm(forms.ModelForm):
+    """
+    Класс ChangeProfileForm. Наследние класса ModelForm.
+    Реализует форму изменения профиля пользователя.
+    """
     avatar = forms.FileField(widget=forms.FileInput({'class': 'Profile-file form-input',
                 'id': 'avatar',
                 'data-validate': 'onlyImgAvatar',
@@ -53,6 +64,10 @@ class ChangeProfileForm(forms.ModelForm):
         
 
 class ChangeUserForm(PasswordChangeForm, forms.ModelForm):
+    """
+    Класс ChangeUserForm. Наследние классов PasswordChangeForm, ModelForm.
+    Реализует форму изменения профиля.
+    """
     email, first_name, last_name, old_password, new_password1, new_password2 = (
         forms.CharField(widget=forms.TextInput(attrs={
             'class': class_field,

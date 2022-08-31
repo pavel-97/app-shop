@@ -12,6 +12,10 @@ from app_shop.validators import validate_card_even, validate_card_length
 
 
 class Profile(models.Model):
+    """
+    Класс Profile. Наследние класса Model.
+    Реализует таблицу с профилями пользователей.
+    """
     user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name=_('user'))
     balance = models.DecimalField(max_digits=6, decimal_places=2, default=0, verbose_name=_('balance'))
     avatar = models.ImageField(upload_to=tools.get_path ,blank=True, null=True, validators=[validators.validate_image, ], verbose_name=_('avatar'))
@@ -25,6 +29,10 @@ class Profile(models.Model):
     
     
 class HistoryOrder(models.Model):
+    """
+    Класс HistoryOrder. Наследние класса Model.
+    Реализует таблицу с историями пользователей.
+    """
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE, blank=True, null=True, default=None, verbose_name=_('profile'))
     orders = models.ManyToManyField('app_shop.Order', verbose_name=_('orders'))
     

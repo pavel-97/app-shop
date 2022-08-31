@@ -15,6 +15,10 @@ from . import forms
 
 
 class AccountView(LoginRequiredMixin, BasketContextMixin, CategoryContextMixin, View):
+    """
+    Класс AccountView. Наследник классов LoginRequiredMixin, BasketContextMixin, CategoryContextMixin, View.
+    Реализует страницу аккаунта авторизированного пользователя.
+    """
     template_name = 'app_profile/account.html'
     
     def get_context_data(self, *args, **kwargs):
@@ -25,6 +29,10 @@ class AccountView(LoginRequiredMixin, BasketContextMixin, CategoryContextMixin, 
     
     
 class ProfileView(LoginRequiredMixin, BasketContextMixin, CategoryContextMixin, UpdateView):
+    """
+    Класс ProfileView. Наследник классов LoginRequiredMixin, BasketContextMixin, CategoryContextMixin, UpdateView.
+    Реализует страницу изменения данных профиля авторизированного пользователя.
+    """
     template_name = 'app_profile/profile.html'
     form_class = forms.ChangeProfileForm
     model = models.Profile
@@ -55,6 +63,10 @@ class ProfileView(LoginRequiredMixin, BasketContextMixin, CategoryContextMixin, 
     
     
 class HistoryOrderView(LoginRequiredMixin, BasketContextMixin, CategoryContextMixin, View):
+    """
+    Класс HistoryOrderView. Наследник классов LoginRequiredMixin, BasketContextMixin, CategoryContextMixin, View.
+    Реализует страницу вывода истории заказов авторизированного пользователя.
+    """
     template_name = 'app_profile/history_order.html'
     model = models.HistoryOrder
     
@@ -65,6 +77,10 @@ class HistoryOrderView(LoginRequiredMixin, BasketContextMixin, CategoryContextMi
     
     
 class HistoryReviewView(LoginRequiredMixin, BasketContextMixin, CategoryContextMixin, View):
+    """
+    Класс HistoryReviewView. Наследник классов LoginRequiredMixin, BasketContextMixin, CategoryContextMixin, View.
+    Реализует страницу вывода истории просмотров товаров авторизированного пользователя.
+    """
     template_name = 'app_profile/history_review.html'
     
     def get_context_data(self, *args, **kwargs):
@@ -75,15 +91,27 @@ class HistoryReviewView(LoginRequiredMixin, BasketContextMixin, CategoryContextM
     
     
 class ProfileLoginView(BasketContextMixin, CategoryContextMixin, LoginView):
+    """
+    Класс ProfileLoginView. Наследник классов BasketContextMixin, CategoryContextMixin, LoginView.
+    Реализует страницу авторизации для неавторизированного пользователя.
+    """
     template_name = 'app_profile/login.html'
     authentication_form = forms.LoginForm
     
     
 class ProfileLogoutView(LogoutView):
+    """
+    Класс ProfileLogoutView. Наследник классов LogoutView.
+    Класс реализует перенаправление для пользователя который вышел из своего аккаунта.
+    """
     pass
     
     
 class ProfileRegistrationView(BasketContextMixin, CategoryContextMixin, View):
+    """
+    Класс ProfileRegistrationView. Наследник классов BasketContextMixin, CategoryContextMixin, View.
+    Реализует страницу регистрации неавторезированного пользователя, если у него еще нет аккаунта.
+    """
     template_name = 'app_profile/registration.html'
     form = forms.ProfileRegistrationForm
     
