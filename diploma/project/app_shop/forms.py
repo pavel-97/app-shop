@@ -11,7 +11,10 @@ from . import decorators
 
 
 class CommentForm(ModelForm):
-    
+    """
+    Класс CommentForm. Наследние класса ModelForm.
+    Реализует форму создания комментариев.
+    """    
     def save(self, request, slug, *args, **kwargs):
         comment = models.ProductComment.objects.create(
             profile=Profile.objects.get(user=request.user),
@@ -29,7 +32,10 @@ class CommentForm(ModelForm):
         
         
 class MakeOrderForm(ModelForm):
-    
+    """
+    Класс MakeOrderForm. Наследние класса ModelForm.
+    Реализует форму создания заказа.
+    """
     def take_products_from_storage(self):
         basket = cache.get('basket', dict())
         for product, count in basket.items():
