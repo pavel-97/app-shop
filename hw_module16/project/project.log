@@ -1,0 +1,70 @@
+Not Found: /favicon.ico
+/home/pavel/myprojects/skillbox/django/hw_module16/project/app_profile/views.py changed, reloading.
+Watching for file changes with StatReloader
+/home/pavel/myprojects/skillbox/django/hw_module16/project/app_profile/logger.py changed, reloading.
+Watching for file changes with StatReloader
+/home/pavel/myprojects/skillbox/django/hw_module16/project/project/settings.py changed, reloading.
+Watching for file changes with StatReloader
+/home/pavel/myprojects/skillbox/django/hw_module16/project/app_profile/views.py changed, reloading.
+Watching for file changes with StatReloader
+<class 'app_profile.views.LoginView'>
+
+Not Found: /favicon.ico
+<class 'app_profile.views.ProfileUpdateView'>
+
+/home/pavel/myprojects/skillbox/django/hw_module16/project/app_shops/views.py changed, reloading.
+Watching for file changes with StatReloader
+/home/pavel/myprojects/skillbox/django/hw_module16/project/app_shops/views.py changed, reloading.
+Watching for file changes with StatReloader
+Internal Server Error: /shops/basket
+Traceback (most recent call last):
+  File "/home/pavel/myprojects/skillbox/django/dj_env/lib/python3.8/site-packages/django/core/handlers/exception.py", line 34, in inner
+    response = get_response(request)
+  File "/home/pavel/myprojects/skillbox/django/dj_env/lib/python3.8/site-packages/django/core/handlers/base.py", line 115, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "/home/pavel/myprojects/skillbox/django/dj_env/lib/python3.8/site-packages/django/core/handlers/base.py", line 113, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/pavel/myprojects/skillbox/django/dj_env/lib/python3.8/site-packages/django/views/generic/base.py", line 71, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/pavel/myprojects/skillbox/django/dj_env/lib/python3.8/site-packages/django/contrib/auth/mixins.py", line 52, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+  File "/home/pavel/myprojects/skillbox/django/dj_env/lib/python3.8/site-packages/django/views/generic/base.py", line 97, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/home/pavel/myprojects/skillbox/django/hw_module16/project/app_shops/logger.py", line 9, in wrapper
+    logger.debug('{}'.func.__class__)
+AttributeError: 'str' object has no attribute 'func'
+/home/pavel/myprojects/skillbox/django/hw_module16/project/app_shops/logger.py changed, reloading.
+Watching for file changes with StatReloader
+<class 'function'>
+/home/pavel/myprojects/skillbox/django/hw_module16/project/app_shops/logger.py changed, reloading.
+Watching for file changes with StatReloader
+function
+/home/pavel/myprojects/skillbox/django/hw_module16/project/app_shops/logger.py changed, reloading.
+Watching for file changes with StatReloader
+<class 'app_shops.views.BasketView'>
+/home/pavel/myprojects/skillbox/django/hw_module16/project/app_shops/forms.py changed, reloading.
+Watching for file changes with StatReloader
+<class 'app_shops.views.BasketView'>
+<class 'app_shops.forms.BasketForm'>
+Watching for file changes with StatReloader
+/home/pavel/myprojects/skillbox/django/hw_module16/project/project/urls.py changed, reloading.
+Watching for file changes with StatReloader
+Not Found: /entry-debug/
+Starting new HTTPS connection (1): o1269588.ingest.sentry.io:443
+https://o1269588.ingest.sentry.io:443 "POST /api/6459739/envelope/ HTTP/1.1" 200 41
+Internal Server Error: /sentry-debug/
+Traceback (most recent call last):
+  File "/home/pavel/myprojects/skillbox/django/dj_env/lib/python3.8/site-packages/django/core/handlers/exception.py", line 34, in inner
+    response = get_response(request)
+  File "/home/pavel/myprojects/skillbox/django/dj_env/lib/python3.8/site-packages/django/core/handlers/base.py", line 115, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "/home/pavel/myprojects/skillbox/django/dj_env/lib/python3.8/site-packages/django/core/handlers/base.py", line 113, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/pavel/myprojects/skillbox/django/dj_env/lib/python3.8/site-packages/sentry_sdk/integrations/django/views.py", line 67, in sentry_wrapped_callback
+    return callback(request, *args, **kwargs)
+  File "/home/pavel/myprojects/skillbox/django/hw_module16/project/project/urls.py", line 21, in trigger_error
+    division_by_zero = 1 / 0
+ZeroDivisionError: division by zero
+https://o1269588.ingest.sentry.io:443 "POST /api/6459739/store/ HTTP/1.1" 200 41
+https://o1269588.ingest.sentry.io:443 "POST /api/6459739/envelope/ HTTP/1.1" 200 41
+https://o1269588.ingest.sentry.io:443 "POST /api/6459739/envelope/ HTTP/1.1" 200 2

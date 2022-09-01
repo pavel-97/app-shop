@@ -25,9 +25,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'ygqy7xecmuol@x!34)twddwox=+*a-6(lu*%m9z20hb!4l@$q2'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = bool(os.environ.get('DJANGO_DEBUG'), True)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['app-shop.herokuapp.com',]
 
 
 # Application definition
@@ -39,8 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'debug_toolbar',
-    'schema_graph',
+    # 'debug_toolbar',
+    # 'schema_graph',
     'mptt',
     'app_shop.apps.AppShopConfig',
     'app_profile.apps.AppProfileConfig',
@@ -55,7 +55,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.locale.LocaleMiddleware',
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
+    # 'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 CACHES = {
@@ -64,9 +64,9 @@ CACHES = {
     }
 }
 
-INTERNAL_IPS = [
-    '127.0.0.1',
-]
+# INTERNAL_IPS = [
+#     '127.0.0.1',
+# ]
 
 ROOT_URLCONF = 'project.urls'
 
